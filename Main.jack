@@ -1,0 +1,17 @@
+class Main {
+    function void main () {
+        while (true) {
+            do Main.fillScreen(false);
+            do Sys.wait(1000);
+            do Main.fillScreen(true);
+            do Sys.wait(1000);
+        }
+        return;
+    }
+
+    function void fillScreen (boolean color) {
+        do Screen.setColor(color);
+        do Screen.drawRectangle(0, 0, 511, 255);
+        return;
+    }
+}
