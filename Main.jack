@@ -1,5 +1,9 @@
 class Main {
     function void main () {
+        do Viewport.fillScreen();
+        do Sys.wait(1000);
+        do Viewport.clearScreen();
+        do Sys.wait(1000);
         do Hero.draw(0);
         return;
     }

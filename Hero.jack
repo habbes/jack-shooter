@@ -1,7 +1,7 @@
 class Hero {
     function void draw (int location) {
         var int  memAddress;
-        let memAddress = 16384+location;
+        let memAddress = Viewport.getAddress() + location;
         do Memory.poke(memAddress+0, 0);
         do Memory.poke(memAddress+32, 192);
         do Memory.poke(memAddress+64, 480);

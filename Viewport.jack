@@ -1,0 +1,63 @@
+/**
+ * helper class with additional screen management functions
+ * relevant to the game
+ */
+class Viewport {
+
+    function boolean getWhite () {
+        return false;
+    }
+
+    function boolean getBlack () {
+        return true;
+    }
+
+    function int getWidth () {
+        return 256;
+    }
+
+    function int getHeight () {
+        return 511;
+    }
+
+    function int getMaxX () {
+        return 255;
+    }
+
+    function int getMaxY () {
+        return 511;
+    }
+
+    function int getAddress () {
+        return 16384;
+    }
+
+    function void clearScreen () {
+        do Viewport.clearArea(0, 0, 255, 511);
+        return;
+    }
+    
+    function void fillScreen () {
+        do Viewport.fillArea(0, 0, 255, 511);
+        return;
+    }
+    
+    function void fillArea (int x, int y, int width, int height) {
+        do Viewport.colorArea(Viewport.getBlack(), x, y, width, height);
+        return;
+    }
+
+    function void clearArea (int x, int y, int width, int height) {
+        do Viewport.colorArea(Viewport.getWhite(), x, y, width, height);
+        return;
+    }
+
+    function void colorArea (boolean color, int x, int y, int width, int height) {
+        do Screen.setColor(color);
+        // I know it doesn't make sense to pass the height before the width
+        // but the other way around causes a runtime error because
+        // the dimensions go out of bounds
+        do Screen.drawRectangle(x, y, y + height, x + width);
+        return;
+    }
+}
