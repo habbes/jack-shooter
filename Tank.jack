@@ -1,0 +1,69 @@
+class Tank {
+    field int x, y, nextX, nextY, width, height;
+    field int direction;
+
+    constructor Tank new () {
+        let width = 16;
+        let height = 16;
+        return this;
+    }
+
+    method int getWidth () {
+        return width;
+    }
+
+    method int getHeight () {
+        return height;
+    }
+
+    method int getX () {
+        return x;
+    }
+
+    method void setX (int Ax) {
+        let x = Ax;
+        return;
+    }
+
+    method int getY () {
+        return y;
+    }
+
+    method void setY (int Ay) {
+        let y = Ay;
+        return;
+    }
+
+    method void setLocation (int Ax, int Ay) {
+        do setX(Ax);
+        do setY(Ay);
+        return;
+    }
+
+    method void draw() {
+        var int memAddress;
+        let memAddress = Viewport.coordsToAddress(x, y);
+        do Memory.poke(memAddress+0, 384);
+        do Memory.poke(memAddress+32, -3697);
+        do Memory.poke(memAddress+64, -3697);
+        do Memory.poke(memAddress+96, -1);
+        do Memory.poke(memAddress+128, -1);
+        do Memory.poke(memAddress+160, -1);
+        do Memory.poke(memAddress+192, -1);
+        do Memory.poke(memAddress+224, -1);
+        do Memory.poke(memAddress+256, -1);
+        do Memory.poke(memAddress+288, -1);
+        do Memory.poke(memAddress+320, -1);
+        do Memory.poke(memAddress+352, -385);
+        do Memory.poke(memAddress+384, -385);
+        do Memory.poke(memAddress+416, -4081);
+        do Memory.poke(memAddress+448, -4081);
+        do Memory.poke(memAddress+480, 0);
+        return;
+    }
+
+    method void clear() {
+        do Viewport.clearArea(x, y, width, height);
+        return;
+    }
+}

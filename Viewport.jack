@@ -13,19 +13,19 @@ class Viewport {
     }
 
     function int getWidth () {
-        return 256;
+        return 512;
     }
 
     function int getHeight () {
-        return 511;
+        return 256;
     }
 
     function int getMaxX () {
-        return 255;
+        return 511;
     }
 
     function int getMaxY () {
-        return 511;
+        return 255;
     }
 
     function int getAddress () {
@@ -33,12 +33,12 @@ class Viewport {
     }
 
     function void clearScreen () {
-        do Viewport.clearArea(0, 0, 255, 511);
+        do Viewport.clearArea(0, 0, Viewport.getMaxX(), Viewport.getMaxY());
         return;
     }
     
     function void fillScreen () {
-        do Viewport.fillArea(0, 0, 255, 511);
+        do Viewport.fillArea(0, 0, Viewport.getMaxX(), Viewport.getMaxY());
         return;
     }
     
@@ -54,10 +54,13 @@ class Viewport {
 
     function void colorArea (boolean color, int x, int y, int width, int height) {
         do Screen.setColor(color);
-        // I know it doesn't make sense to pass the height before the width
-        // but the other way around causes a runtime error because
-        // the dimensions go out of bounds
-        do Screen.drawRectangle(x, y, y + height, x + width);
+        do Screen.drawRectangle(x, y, x + width, y + height);
         return;
+    }
+
+    function int coordsToAddress (int x, int y) {
+        var int base;
+        let base = (x / 16) + (32 * y);
+        return Viewport.getAddress() + base;
     }
 }

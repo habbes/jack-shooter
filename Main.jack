@@ -1,16 +1,28 @@
 class Main {
     function void main () {
-        do Viewport.fillScreen();
+        var int x,y;
+        var Tank hero;
+        let hero = Tank.new();
+        let x = 0;
+        let y = 0;
+        do hero.setLocation(x, y);
+        do hero.draw();
         do Sys.wait(1000);
-        do Viewport.clearScreen();
+        do hero.clear();
         do Sys.wait(1000);
-        do Hero.draw(0);
+        do hero.draw();
+        // while (x < (Viewport.getMaxX() - 15)) {
+        //     do hero.draw()
+        //     do Sys.wait(30);
+        //     do hero.clear(x, y);
+        //     let x = x + 15;
+        // }
         return;
     }
 
     function void fillScreen (boolean color) {
         do Screen.setColor(color);
-        do Screen.drawRectangle(0, 0, 511, 255);
+        do Screen.drawRectangle(0, 0, 511, 240);
         return;
     }
 }
