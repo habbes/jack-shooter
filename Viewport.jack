@@ -71,4 +71,28 @@ class Viewport {
         let base = (x / 16) + (32 * y);
         return Viewport.getAddress() + base;
     }
+
+    function void pokeShape (int x, int y, Array shape) {
+        var int memAddress, i;
+        let memAddress = Viewport.coordsToAddress(x, y);
+        let i = 0;
+        while ( i < 16) {
+            do Memory.poke(memAddress + (32 * i), shape[i]);
+            let i = i + 1;
+        }
+        return;
+    }
+
+    function void pokeClear (int x, int y) {
+        var Array shape;
+        var int i;
+        let shape = Array.new(16);
+        let i = 0;
+        while (i < 16) { 
+            let shape[i] = 0; 
+            let i = i + 1;
+        }
+        do Viewport.pokeShape(x, y, shape);
+        return;
+    }
 }
