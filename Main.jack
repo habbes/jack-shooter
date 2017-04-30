@@ -1,11 +1,10 @@
 class Main {
     function void main () {
-        var int x,y;
+        var Coord c;
         var Tank hero;
         let hero = Tank.new();
-        let x = Viewport.getCenterX();
-        let y = Viewport.getCenterY();
-        do hero.setLocation(x, y);
+        let c = Viewport.getCenter();
+        do hero.setCoord(c);
         do hero.draw();
         do Sys.wait(1000);
         do hero.clear();

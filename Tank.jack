@@ -1,12 +1,12 @@
 class Tank {
     field int x, y, nextX, nextY, width, height;
+    field Coord coord;
     field int direction;
 
     constructor Tank new () {
         let width = 16;
-        let height = 16;
-        let x = 0;
-        let y = 0;
+        let height = 15;
+        let coord = Coord.origin();
         let direction = 1;
         return this;
     }
@@ -19,27 +19,12 @@ class Tank {
         return height;
     }
 
-    method int getX () {
-        return x;
+    method Coord getCoord () {
+        return coord;
     }
 
-    method void setX (int Ax) {
-        let x = Ax;
-        return;
-    }
-
-    method int getY () {
-        return y;
-    }
-
-    method void setY (int Ay) {
-        let y = Ay;
-        return;
-    }
-
-    method void setLocation (int Ax, int Ay) {
-        do setX(Ax);
-        do setY(Ay);
+    method void setCoord (Coord c) {
+        let coord = c;
         return;
     }
 
@@ -56,10 +41,18 @@ class Tank {
     method void moveForward () {
         var int step;
         let step = 16;
-        if (direction = 1) { do setY(y - step); }
-        if (direction = 2) { do setY(y + step); }
-        if (direction = 3) { do setX(x - step); }
-        if (direction = 4) { do setX(x + step); }
+        if (direction = 1) { 
+            let coord = coord.moveY(-step);
+        }
+        if (direction = 2) {
+            let coord = coord.moveY(step);
+        }
+        if (direction = 3) {
+            let coord = coord.moveX(-step); 
+        }
+        if (direction = 4) {
+            let coord = coord.moveY(step);
+        }
         return;
     }
 
@@ -90,11 +83,25 @@ class Tank {
 
     method void draw() {
         var int memAddress;
-        let memAddress = Viewport.coordsToAddress(x, y);
-        if (direction = 1) { do drawUp(memAddress); }
+        let memAddress = Viewport.coordsToAddress(coord);
+        if (direction = 1) { do drawUp2(memAddress); }
         if (direction = 2) { do drawDown(memAddress);}
         if (direction = 3) { do drawLeft(memAddress);}
         if (direction = 4) { do drawRight(memAddress);}
+        return;
+    }
+
+    method void drawUp2 (int memAddress) {
+        // left track
+        do Viewport.fillArea(coord.moveY(1), 4, 14);
+        // left part of body
+        do Viewport.fillArea(coord.move(4, 3), 3, 10);
+        // gun
+        do Viewport.fillArea(coord.moveX(7), 2, 11);
+        // right part of body
+        do Viewport.fillArea(coord.move(9, 3), 3, 10);
+        // right track
+        do Viewport.fillArea(coord.move(12, 1), 4, 14);
         return;
     }
 
@@ -179,7 +186,7 @@ class Tank {
     }
 
     method void clear() {
-        do Viewport.pokeClear(x, y);
+        do Viewport.pokeClear(coord);
         return;
     }
 }
