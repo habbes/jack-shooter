@@ -9,14 +9,22 @@ class Main {
         do hero.draw();
         do Sys.wait(1000);
         do hero.clear();
-        do Sys.wait(1000);
+        do hero.turnRight();
         do hero.draw();
-        // while (x < (Viewport.getMaxX() - 15)) {
-        //     do hero.draw()
-        //     do Sys.wait(30);
-        //     do hero.clear(x, y);
-        //     let x = x + 15;
-        // }
+        do Sys.wait(1000);
+        do hero.clear();
+        do hero.turnDown();
+        do hero.draw();
+        do Sys.wait(1000);
+        do hero.clear();
+        do hero.turnLeft();
+        do hero.draw();
+        do Sys.wait(1000);
+        do hero.clear();
+        do hero.turnUp();
+        do hero.draw();
+        do Sys.wait(1000);
+        
         return;
     }
 

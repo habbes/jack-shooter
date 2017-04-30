@@ -5,6 +5,9 @@ class Tank {
     constructor Tank new () {
         let width = 16;
         let height = 16;
+        let x = 0;
+        let y = 0;
+        let direction = 1;
         return this;
     }
 
@@ -40,9 +43,42 @@ class Tank {
         return;
     }
 
+    method void turn (int d) {
+        let direction = d;
+        return;
+    }
+
+    method void turnUp () {
+        do turn(1);
+        return;
+    }
+
+    method void turnDown () {
+        do turn(2);
+        return;
+    }
+
+    method void turnLeft () {
+        do turn(3);
+        return;
+    }
+
+    method void turnRight () {
+        do turn(4);
+        return;
+    }
+
     method void draw() {
         var int memAddress;
         let memAddress = Viewport.coordsToAddress(x, y);
+        if (direction = 1) { do drawUp(memAddress); }
+        if (direction = 2) { do drawDown(memAddress);}
+        if (direction = 3) { do drawLeft(memAddress);}
+        if (direction = 4) { do drawRight(memAddress);}
+        return;
+    }
+
+    method void drawUp (int memAddress) {
         do Memory.poke(memAddress+0, 384);
         do Memory.poke(memAddress+32, -3697);
         do Memory.poke(memAddress+64, -3697);
@@ -59,6 +95,66 @@ class Tank {
         do Memory.poke(memAddress+416, -4081);
         do Memory.poke(memAddress+448, -4081);
         do Memory.poke(memAddress+480, 0);
+        return;
+    }
+
+    method void drawDown (int memAddress) {
+        do Memory.poke(memAddress+0, 0);
+        do Memory.poke(memAddress+32, -4081);
+        do Memory.poke(memAddress+64, -4081);
+        do Memory.poke(memAddress+96, -385);
+        do Memory.poke(memAddress+128, -385);
+        do Memory.poke(memAddress+160, -1);
+        do Memory.poke(memAddress+192, -1);
+        do Memory.poke(memAddress+224, -1);
+        do Memory.poke(memAddress+256, -1);
+        do Memory.poke(memAddress+288, -1);
+        do Memory.poke(memAddress+320, -1);
+        do Memory.poke(memAddress+352, -1);
+        do Memory.poke(memAddress+384, -1);
+        do Memory.poke(memAddress+416, -3697);
+        do Memory.poke(memAddress+448, -3697);
+        do Memory.poke(memAddress+480, 384);
+        return;
+    }
+
+    method void drawLeft (int memAddress) {
+        do Memory.poke(memAddress+0, 32766);
+        do Memory.poke(memAddress+32, 32766);
+        do Memory.poke(memAddress+64, 32766);
+        do Memory.poke(memAddress+96, 32766);
+        do Memory.poke(memAddress+128, 8184);
+        do Memory.poke(memAddress+160, 8184);
+        do Memory.poke(memAddress+192, 8184);
+        do Memory.poke(memAddress+224, 2047);
+        do Memory.poke(memAddress+256, 2047);
+        do Memory.poke(memAddress+288, 8184);
+        do Memory.poke(memAddress+320, 8184);
+        do Memory.poke(memAddress+352, 8184);
+        do Memory.poke(memAddress+384, 32766);
+        do Memory.poke(memAddress+416, 32766);
+        do Memory.poke(memAddress+448, 32766);
+        do Memory.poke(memAddress+480, 32766);
+        return;
+    }
+
+    method void drawRight (int memAddress) {
+        do Memory.poke(memAddress+0, 32766);
+        do Memory.poke(memAddress+32, 32766);
+        do Memory.poke(memAddress+64, 32766);
+        do Memory.poke(memAddress+96, 32766);
+        do Memory.poke(memAddress+128, 8184);
+        do Memory.poke(memAddress+160, 8184);
+        do Memory.poke(memAddress+192, 8184);
+        do Memory.poke(memAddress+224, -32);
+        do Memory.poke(memAddress+256, -32);
+        do Memory.poke(memAddress+288, 8184);
+        do Memory.poke(memAddress+320, 8184);
+        do Memory.poke(memAddress+352, 8184);
+        do Memory.poke(memAddress+384, 32766);
+        do Memory.poke(memAddress+416, 32766);
+        do Memory.poke(memAddress+448, 32766);
+        do Memory.poke(memAddress+480, 32766);
         return;
     }
 
