@@ -43,6 +43,26 @@ class Tank {
         return;
     }
 
+    method void move (int d) {
+        if (direction = d) {
+            do moveForward();
+        }
+        else {
+            do turn(d);
+        }
+        return;
+    }
+
+    method void moveForward () {
+        var int step;
+        let step = 16;
+        if (direction = 1) { do setY(y - step); }
+        if (direction = 2) { do setY(y + step); }
+        if (direction = 3) { do setX(x - step); }
+        if (direction = 4) { do setX(x + step); }
+        return;
+    }
+
     method void turn (int d) {
         let direction = d;
         return;
@@ -159,7 +179,12 @@ class Tank {
     }
 
     method void clear() {
-        do Viewport.clearArea(x, y, width, height);
+        do Viewport.clearScreen();
+        // do Viewport.clearArea(x, y, width, height);
+        // do Output.printInt(x);
+        // do Output.printString(",");
+        // do Output.printInt(y);
+        // do Output.printString(";");
         return;
     }
 }

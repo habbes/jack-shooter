@@ -28,6 +28,14 @@ class Viewport {
         return 255;
     }
 
+    function int getCenterX () {
+        return Viewport.getMaxX() / 2;
+    }
+
+    function int getCenterY () {
+        return Viewport.getMaxY() / 2;
+    }
+
     function int getAddress () {
         return 16384;
     }
