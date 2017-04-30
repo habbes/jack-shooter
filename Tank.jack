@@ -5,7 +5,7 @@ class Tank {
 
     constructor Tank new () {
         let width = 16;
-        let height = 15;
+        let height = 16;
         let coord = Coord.origin();
         let direction = 1;
         return this;
@@ -84,109 +84,56 @@ class Tank {
     method void draw() {
         var int memAddress;
         let memAddress = Viewport.coordsToAddress(coord);
-        if (direction = 1) { do drawUp2(memAddress); }
-        if (direction = 2) { do drawDown(memAddress);}
-        if (direction = 3) { do drawLeft(memAddress);}
-        if (direction = 4) { do drawRight(memAddress);}
+        if (direction = 1) { do drawUp(); }
+        if (direction = 2) { do drawDown();}
+        if (direction = 3) { do drawLeft();}
+        if (direction = 4) { do drawRight();}
         return;
     }
 
-    method void drawUp2 (int memAddress) {
+    method void drawUp () {
         // left track
-        do Viewport.fillArea(coord.moveY(1), 4, 14);
+        do Viewport.fillArea(coord.moveY(1), 4, 15);
         // left part of body
-        do Viewport.fillArea(coord.move(4, 3), 3, 10);
+        do Viewport.fillArea(coord.move(4, 3), 3, 11);
         // gun
         do Viewport.fillArea(coord.moveX(7), 2, 11);
         // right part of body
-        do Viewport.fillArea(coord.move(9, 3), 3, 10);
+        do Viewport.fillArea(coord.move(9, 3), 3, 11);
         // right track
-        do Viewport.fillArea(coord.move(12, 1), 4, 14);
+        do Viewport.fillArea(coord.move(12, 1), 4, 15);
         return;
     }
 
-    method void drawUp (int memAddress) {
-        do Memory.poke(memAddress+0, 384);
-        do Memory.poke(memAddress+32, -3697);
-        do Memory.poke(memAddress+64, -3697);
-        do Memory.poke(memAddress+96, -1);
-        do Memory.poke(memAddress+128, -1);
-        do Memory.poke(memAddress+160, -1);
-        do Memory.poke(memAddress+192, -1);
-        do Memory.poke(memAddress+224, -1);
-        do Memory.poke(memAddress+256, -1);
-        do Memory.poke(memAddress+288, -1);
-        do Memory.poke(memAddress+320, -1);
-        do Memory.poke(memAddress+352, -385);
-        do Memory.poke(memAddress+384, -385);
-        do Memory.poke(memAddress+416, -4081);
-        do Memory.poke(memAddress+448, -4081);
-        do Memory.poke(memAddress+480, 0);
+    method void drawDown () {
+        do Viewport.fillArea(coord, 4, 15);
+        do Viewport.fillArea(coord.move(4, 2), 3, 11);
+        do Viewport.fillArea(coord.move(7, 5), 2, 11);
+        do Viewport.fillArea(coord.move(9, 2), 3, 11);
+        do Viewport.fillArea(coord.moveX(12), 4, 15);
         return;
     }
 
-    method void drawDown (int memAddress) {
-        do Memory.poke(memAddress+0, 0);
-        do Memory.poke(memAddress+32, -4081);
-        do Memory.poke(memAddress+64, -4081);
-        do Memory.poke(memAddress+96, -385);
-        do Memory.poke(memAddress+128, -385);
-        do Memory.poke(memAddress+160, -1);
-        do Memory.poke(memAddress+192, -1);
-        do Memory.poke(memAddress+224, -1);
-        do Memory.poke(memAddress+256, -1);
-        do Memory.poke(memAddress+288, -1);
-        do Memory.poke(memAddress+320, -1);
-        do Memory.poke(memAddress+352, -1);
-        do Memory.poke(memAddress+384, -1);
-        do Memory.poke(memAddress+416, -3697);
-        do Memory.poke(memAddress+448, -3697);
-        do Memory.poke(memAddress+480, 384);
+    method void drawLeft () {
+        do Viewport.fillArea(coord.moveX(1), 15, 4);
+        do Viewport.fillArea(coord.move(3, 4), 11, 3);
+        do Viewport.fillArea(coord.moveY(7), 11, 2);
+        do Viewport.fillArea(coord.move(3, 9), 11, 3);
+        do Viewport.fillArea(coord.move(1, 12), 15, 4);
         return;
     }
 
-    method void drawLeft (int memAddress) {
-        do Memory.poke(memAddress+0, 32766);
-        do Memory.poke(memAddress+32, 32766);
-        do Memory.poke(memAddress+64, 32766);
-        do Memory.poke(memAddress+96, 32766);
-        do Memory.poke(memAddress+128, 8184);
-        do Memory.poke(memAddress+160, 8184);
-        do Memory.poke(memAddress+192, 8184);
-        do Memory.poke(memAddress+224, 2047);
-        do Memory.poke(memAddress+256, 2047);
-        do Memory.poke(memAddress+288, 8184);
-        do Memory.poke(memAddress+320, 8184);
-        do Memory.poke(memAddress+352, 8184);
-        do Memory.poke(memAddress+384, 32766);
-        do Memory.poke(memAddress+416, 32766);
-        do Memory.poke(memAddress+448, 32766);
-        do Memory.poke(memAddress+480, 32766);
-        return;
-    }
-
-    method void drawRight (int memAddress) {
-        do Memory.poke(memAddress+0, 32766);
-        do Memory.poke(memAddress+32, 32766);
-        do Memory.poke(memAddress+64, 32766);
-        do Memory.poke(memAddress+96, 32766);
-        do Memory.poke(memAddress+128, 8184);
-        do Memory.poke(memAddress+160, 8184);
-        do Memory.poke(memAddress+192, 8184);
-        do Memory.poke(memAddress+224, -32);
-        do Memory.poke(memAddress+256, -32);
-        do Memory.poke(memAddress+288, 8184);
-        do Memory.poke(memAddress+320, 8184);
-        do Memory.poke(memAddress+352, 8184);
-        do Memory.poke(memAddress+384, 32766);
-        do Memory.poke(memAddress+416, 32766);
-        do Memory.poke(memAddress+448, 32766);
-        do Memory.poke(memAddress+480, 32766);
+    method void drawRight () {
+        do Viewport.fillArea(coord, 15, 4);
+        do Viewport.fillArea(coord.move(2, 4), 11, 3);
+        do Viewport.fillArea(coord.move(5, 7), 11, 2);
+        do Viewport.fillArea(coord.move(2, 9), 11, 3);
+        do Viewport.fillArea(coord.moveY(12), 15, 4);
         return;
     }
 
     method void clear() {
-        do Viewport.pokeClear(coord);
+        do Viewport.clearArea(coord, width, height);
         return;
     }
 }
