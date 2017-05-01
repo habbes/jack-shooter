@@ -1,28 +1,8 @@
 class Main {
     function void main () {
-        var Coord c;
-        var Tank hero;
-        let hero = Tank.new();
-        let c = Viewport.getCenter();
-        do hero.setCoord(c);
-        do hero.draw();
-        do Sys.wait(1000);
-        do hero.clear();
-        do Sys.wait(1000);
-        do hero.turnDown();
-        do hero.draw();
-        do Sys.wait(1000);
-        do hero.clear();
-        do Sys.wait(1000);
-        do hero.turnLeft();
-        do hero.draw();
-        do Sys.wait(1000);
-        do hero.clear();
-        do Sys.wait(1000);
-        do hero.turnRight();
-        do hero.draw();
-        do Sys.wait(1000);
-        
+        var Game game;
+        let game = Game.new();
+        do game.run();        
         return;
     }
 

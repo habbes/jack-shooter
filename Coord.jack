@@ -27,6 +27,11 @@ class Coord {
         return Coord.new(x + stepX, y + stepY);
     }
 
+    method void dispose () {
+        do Memory.deAlloc(this);
+        return;
+    }
+
     function Coord origin () {
         return Coord.new(0, 0);
     }
