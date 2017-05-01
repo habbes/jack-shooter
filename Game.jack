@@ -1,10 +1,12 @@
 class Game {
     field int frameInterval;
     field SceneManager scene;
+    field Tank hero;
 
     constructor Game new () {
         let frameInterval = 33;
         let scene = SceneManager.new();
+        let hero = Tank.new();
         return this;
     }
 
@@ -16,13 +18,10 @@ class Game {
     method void run () {
         var boolean exit;
         var char key;
-        var Tank hero;
-        var Coord coord;
         let exit = false;
         
         do scene.setHero(hero);
-        // let coord = Viewport.getCenter();
-        // do hero.setCoord(coord);
+        do hero.setCoord(Viewport.getCenterX(), Viewport.getCenterY());
         do hero.draw();
         do wait();
         while (~exit) {
@@ -31,14 +30,15 @@ class Game {
             if (key = 133) { do hero.move(2); }
             if (key = 130) { do hero.move(3); }
             if (key = 132) { do hero.move(4); }
-            do objects.refresh();
+            do scene.refresh();
             do wait();
         }
+        do hero.dispose();
         return;
     }
 
     method void dispose() {
-        do hero.dispose();
+        do scene.dispose();
         do Memory.deAlloc(this);
         return;
     }

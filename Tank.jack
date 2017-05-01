@@ -1,13 +1,13 @@
 class Tank {
-    field int width, height;
-    field Coord coord, lastCoord;
+    field int x, y, lastX, lastY, width, height;
     field int direction, step;
     field boolean dirty;
 
     constructor Tank new () {
         let width = 16;
         let height = 16;
-        let coord = Coord.origin();
+        let x = 0;
+        let y = 0;
         let direction = 1;
         let step = 2;
         let dirty = false;
@@ -22,18 +22,38 @@ class Tank {
         return height;
     }
 
-    method Coord getCoord () {
-        return coord;
+    method int getX () {
+        return x;
     }
 
-    method Coord getLastCoord () {
-        return lastCoord;
+    method int getY () {
+        return y;
     }
 
-    method void setCoord (Coord c) {
-        let lastCoord = coord;
-        let coord = c;
+    method int getLastX () {
+        return lastX;
+    }
+
+    method int getLastY() {
+        return lastY;
+    }
+
+    method void setCoord (int Ax, int Ay) {
+        let lastX = x;
+        let lastY = y;
+        let x = Ax;
+        let y = Ay;
         let dirty = true;
+        return;
+    }
+
+    method void setX(int Ax) {
+        do setCoord(Ax, y);
+        return;
+    }
+
+    method void setY(int Ay) {
+        do setCoord(x, Ay);
         return;
     }
 
@@ -58,16 +78,16 @@ class Tank {
 
     method void moveForward () {
         if (direction = 1) { 
-            do setCoord(coord.moveY(-step));
+            do setY(getY() - step);
         }
         if (direction = 2) {
-            do setCoord(coord.moveY(step));
+            do setY(getY() + step);
         }
         if (direction = 3) {
-            do setCoord(coord.moveX(-step)); 
+            do setX(getX() - step); 
         }
         if (direction = 4) {
-            do setCoord(coord.moveX(step));
+            do setX(getX() + step);
         }
         return;
     }
@@ -107,52 +127,51 @@ class Tank {
 
     method void drawUp () {
         // left track
-        do Viewport.fillArea(coord.moveY(1), 4, 15);
+        do Viewport.fillArea(x, y + 1, 4, 15);
         // left part of body
-        do Viewport.fillArea(coord.move(4, 3), 3, 11);
+        do Viewport.fillArea(x + 4, y + 3, 3, 11);
         // gun
-        do Viewport.fillArea(coord.moveX(7), 2, 11);
+        do Viewport.fillArea(x + 7, y, 2, 11);
         // right part of body
-        do Viewport.fillArea(coord.move(9, 3), 3, 11);
+        do Viewport.fillArea(x + 9, y + 3, 3, 11);
         // right track
-        do Viewport.fillArea(coord.move(12, 1), 4, 15);
+        do Viewport.fillArea(x + 12, y + 1, 4, 15);
         return;
     }
 
     method void drawDown () {
-        do Viewport.fillArea(coord, 4, 15);
-        do Viewport.fillArea(coord.move(4, 2), 3, 11);
-        do Viewport.fillArea(coord.move(7, 5), 2, 11);
-        do Viewport.fillArea(coord.move(9, 2), 3, 11);
-        do Viewport.fillArea(coord.moveX(12), 4, 15);
+        do Viewport.fillArea(x, y, 4, 15);
+        do Viewport.fillArea(x + 4, y + 2, 3, 11);
+        do Viewport.fillArea(x + 7, y + 5, 2, 11);
+        do Viewport.fillArea(x + 9, y + 2, 3, 11);
+        do Viewport.fillArea(x + 12, y, 4, 15);
         return;
     }
 
     method void drawLeft () {
-        do Viewport.fillArea(coord.moveX(1), 15, 4);
-        do Viewport.fillArea(coord.move(3, 4), 11, 3);
-        do Viewport.fillArea(coord.moveY(7), 11, 2);
-        do Viewport.fillArea(coord.move(3, 9), 11, 3);
-        do Viewport.fillArea(coord.move(1, 12), 15, 4);
+        do Viewport.fillArea(x + 1, y, 15, 4);
+        do Viewport.fillArea(x + 3, y + 4, 11, 3);
+        do Viewport.fillArea(x, y + 7, 11, 2);
+        do Viewport.fillArea(x + 3, y + 9, 11, 3);
+        do Viewport.fillArea(x + 1, y + 12, 15, 4);
         return;
     }
 
     method void drawRight () {
-        do Viewport.fillArea(coord, 15, 4);
-        do Viewport.fillArea(coord.move(2, 4), 11, 3);
-        do Viewport.fillArea(coord.move(5, 7), 11, 2);
-        do Viewport.fillArea(coord.move(2, 9), 11, 3);
-        do Viewport.fillArea(coord.moveY(12), 15, 4);
+        do Viewport.fillArea(x, y, 15, 4);
+        do Viewport.fillArea(x + 2, y + 4, 11, 3);
+        do Viewport.fillArea(x + 5, y + 7, 11, 2);
+        do Viewport.fillArea(x + 2, y + 9, 11, 3);
+        do Viewport.fillArea(x, y + 12, 15, 4);
         return;
     }
 
     method void clear() {
-        do Viewport.clearArea(coord, width, height);
+        do Viewport.clearArea(x, y, width, height);
         return;
     }
 
     method void dispose () {
-        do cood.dispose();
         do Memory.deAlloc(this);
         return;
     }

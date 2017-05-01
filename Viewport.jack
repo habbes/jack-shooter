@@ -33,11 +33,11 @@ class Viewport {
     }
 
     function int getCenterX () {
-        return Viewport.getMaxX() / 2;
+        return 255;
     }
 
     function int getCenterY () {
-        return Viewport.getMaxY() / 2;
+        return 128;
     }
 
     function Coord getCenter () {
@@ -49,49 +49,48 @@ class Viewport {
     }
 
     function void clearScreen () {
-        do Viewport.clearArea(Coord.origin(), Viewport.getMaxX(), Viewport.getMaxY());
+        do Viewport.clearArea(0, 0, Viewport.getWidth(), Viewport.getHeight());
         return;
     }
     
     function void fillScreen () {
-        do Viewport.fillArea(Coord.origin(), Viewport.getWidth(), Viewport.getHeight());
+        do Viewport.fillArea(0, 0, Viewport.getWidth(), Viewport.getHeight());
         return;
     }
     
-    function void fillArea (Coord c, int width, int height) {
-        do Viewport.colorArea(Viewport.black(), c, width, height);
+    function void fillArea (int x, int y, int w, int h) {
+        do Viewport.colorArea(Viewport.black(), x, y, w, h);
         return;
     }
 
-    function void clearArea (Coord c, int width, int height) {
-        do Viewport.colorArea(Viewport.white(), c, width, height);
+    function void clearArea (int x, int y, int w, int h) {
+        do Viewport.colorArea(Viewport.white(), x, y, w, h);
         return;
     }
 
     /**
      * fill the specified area on the screen with the specified color
-     * @param color
-     * @param tl the top-left coordinate of the area
+     * @param c
+     * @param x
+     * @para, y
      * @param width the width of the area
      * @param height the height of the area
      */
-    function void colorArea (boolean color, Coord tl, int width, int height) {
-        var Coord br;
-        let br = tl.move(width - 1, height - 1);
-        do Screen.setColor(color);
-        do Screen.drawRectangle(tl.getX(), tl.getY(), br.getX(), br.getY());
+    function void colorArea (boolean c, int x, int y, int w, int h) {
+        do Screen.setColor(c);
+        do Screen.drawRectangle(x, y, (x + w) - 1, (y + h) - 1);
         return;
     }
 
-    function int coordsToAddress (Coord c) {
+    function int coordsToAddress (int x, int y) {
         var int base;
-        let base = (c.getX() / 16) + (32 * c.getY());
+        let base = (x / 16) + (y * 32);
         return Viewport.getAddress() + base;
     }
 
-    function void pokeShape (Coord c, Array shape) {
+    function void pokeShape (int x, int y, Array shape) {
         var int memAddress, i;
-        let memAddress = Viewport.coordsToAddress(c);
+        let memAddress = Viewport.coordsToAddress(x, y);
         let i = 0;
         while ( i < 16) {
             do Memory.poke(memAddress + (32 * i), shape[i]);
@@ -100,7 +99,7 @@ class Viewport {
         return;
     }
 
-    function void pokeClear (Coord c) {
+    function void pokeClear (int x, int y) {
         var Array shape;
         var int i;
         let shape = Array.new(16);
@@ -109,7 +108,8 @@ class Viewport {
             let shape[i] = 0; 
             let i = i + 1;
         }
-        do Viewport.pokeShape(c, shape);
+        do Viewport.pokeShape(x, y, shape);
+        do shape.dispose();
         return;
     }
 }

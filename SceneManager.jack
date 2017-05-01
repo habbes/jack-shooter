@@ -16,7 +16,7 @@ class SceneManager {
 
     method void refresh () {
         if (hero.shouldUpdate()) {
-            do Viewport.clearArea(hero.getLastCoord(), hero.getWidth(), hero.getHeight());
+            do Viewport.clearArea(hero.getLastX(), hero.getLastY(), hero.getWidth(), hero.getHeight());
             do hero.draw();
             do hero.markClean();
         }
