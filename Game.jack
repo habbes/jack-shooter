@@ -30,6 +30,9 @@ class Game {
             if (key = 133) { do hero.move(2); }
             if (key = 130) { do hero.move(3); }
             if (key = 132) { do hero.move(4); }
+            if (key = 32) { 
+                do scene.addBullet(hero.shoot()); 
+            }
             do scene.refresh();
             do wait();
         }

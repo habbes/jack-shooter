@@ -1,0 +1,91 @@
+class Bullet {
+    field int x, y, lastX, lastY, width, height, direction;
+    field int step;
+    field boolean dirty;
+
+    constructor Bullet new (int d) {
+        let step = 4;
+        let dirty = false;
+        let x = 0;
+        let y = 0;
+        do turn(d);
+        return this;
+    }
+
+    method int getX () {
+        return x;
+    }
+
+    method int getY () {
+        return y;
+    }
+
+    method int getLastX () {
+        return lastX;
+    }
+
+    method int getLastY () {
+        return lastY;
+    }
+
+    method void setCoord(int Ax, int Ay) {
+        let lastX = x;
+        let lastY = y;
+        let x = Ax;
+        let y = Ay;
+        let dirty = true;
+        return;
+    }
+
+    method void setX (int Ax) {
+        do setCoord(Ax, y);
+        return;
+    }
+
+    method void setY (int Ay) {
+        do setCoord(x, Ay);
+        return;
+    }
+
+    method int getWidth () {
+        return width;
+    }
+
+    method int getHeight () {
+        return height;
+    }
+
+    method void move () {
+        if (direction = 1) { do setY(getY() - step); }
+        if (direction = 2) { do setY(getY() + step); }
+        if (direction = 3) { do setX(getX() - step); }
+        if (direction = 4) { do setX(getX() + step); }
+        return;
+    }
+
+    method void turn(int d) {
+        let direction = d;
+        if (d < 3) {
+            // vertical
+            let width = 2;
+            let height = 6;
+        }
+        else {
+            // horizontal
+            let width = 6;
+            let height = 2;
+        }
+        return;
+    }
+
+
+    method void draw () {
+        do Viewport.fillArea(x, y, width, height);
+        return;
+    }
+
+    method void dispose () {
+        do Memory.deAlloc(this);
+        return;
+    }
+}

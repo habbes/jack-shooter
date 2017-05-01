@@ -117,6 +117,25 @@ class Tank {
         return;
     }
 
+    method Bullet shoot () {
+        var Bullet b;
+        var int bx, by;
+        let b = Bullet.new(direction);
+        if (direction = 1) {
+            do b.setCoord(x + 7, (y - 1) - b.getHeight());
+        }
+        if (direction = 2) {
+            do b.setCoord(x + 7, y + height);
+        }
+        if (direction = 3) {
+            do b.setCoord((x - 1) - b.getWidth(), y + 7);
+        }
+        if (direction = 4) {
+            do b.setCoord(x + width, y + 7);
+        }
+        return b;
+    }
+
     method void draw() {
         if (direction = 1) { do drawUp(); }
         if (direction = 2) { do drawDown();}

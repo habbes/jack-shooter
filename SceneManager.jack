@@ -1,7 +1,11 @@
 class SceneManager {
     field Tank hero;
+    field Array bullets;
+    field int bulletCount;
 
     constructor SceneManager new () {
+        let bullets = Array.new(10);
+        let bulletCount = 0;
         return this;
     }
 
@@ -14,11 +18,28 @@ class SceneManager {
         return;
     }
 
+    method void addBullet (Bullet b) {
+        let bullets[bulletCount] = b;
+        let bulletCount = bulletCount + 1;
+        return;
+    }
+
     method void refresh () {
+        var int i;
+        var Bullet b;
         if (hero.shouldUpdate()) {
             do Viewport.clearArea(hero.getLastX(), hero.getLastY(), hero.getWidth(), hero.getHeight());
             do hero.draw();
             do hero.markClean();
+        }
+        
+        let i = 0;
+        while (i < bulletCount) {
+            let b = bullets[i];
+            if (~(b = null)) {
+                do b.draw();
+            }
+            let i = i + 1;
         }
         return;
     }
