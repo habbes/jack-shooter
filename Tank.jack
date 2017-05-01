@@ -41,6 +41,11 @@ class Tank {
         return dirty;
     }
 
+    method void markClean () {
+        let dirty = false;
+        return;
+    }
+
     method void move (int d) {
         if (direction = d) {
             do moveForward();
@@ -97,7 +102,6 @@ class Tank {
         if (direction = 2) { do drawDown();}
         if (direction = 3) { do drawLeft();}
         if (direction = 4) { do drawRight();}
-        let dirty = false;
         return;
     }
 

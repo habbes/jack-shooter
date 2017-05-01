@@ -1,5 +1,7 @@
 class Coord {
     field int x, y;
+    static Coord originSingl;
+    static boolean originCreated;
 
     constructor Coord new (int Ax, int Ay) {
         let x = Ax;
@@ -33,6 +35,10 @@ class Coord {
     }
 
     function Coord origin () {
-        return Coord.new(0, 0);
+        if(originCreated) {
+            return originSingl;
+        }
+        let originSingl =  Coord.new(0, 0);
+        return originSingl;
     }
 }

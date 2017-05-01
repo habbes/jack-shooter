@@ -1,10 +1,10 @@
 class Game {
-    field  int frameInterval;
-    field Tank hero;
+    field int frameInterval;
+    field SceneManager scene;
 
     constructor Game new () {
         let frameInterval = 33;
-        let hero = Tank.new();
+        let scene = SceneManager.new();
         return this;
     }
 
@@ -16,8 +16,13 @@ class Game {
     method void run () {
         var boolean exit;
         var char key;
+        var Tank hero;
+        var Coord coord;
         let exit = false;
-        do hero.setCoord(Viewport.getCenter());
+        
+        do scene.setHero(hero);
+        // let coord = Viewport.getCenter();
+        // do hero.setCoord(coord);
         do hero.draw();
         do wait();
         while (~exit) {
@@ -26,10 +31,7 @@ class Game {
             if (key = 133) { do hero.move(2); }
             if (key = 130) { do hero.move(3); }
             if (key = 132) { do hero.move(4); }
-            if (hero.shouldUpdate()) {
-                do Viewport.clearArea(hero.getLastCoord(), hero.getWidth(), hero.getHeight());
-                do hero.draw();
-            }
+            do objects.refresh();
             do wait();
         }
         return;

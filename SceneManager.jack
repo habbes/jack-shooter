@@ -1,0 +1,30 @@
+class SceneManager {
+    field Tank hero;
+
+    constructor SceneManager new () {
+        return this;
+    }
+
+    method Tank getHero () {
+        return hero;
+    }
+
+    method void setHero (Tank h) {
+        let hero = h;
+        return;
+    }
+
+    method void refresh () {
+        if (hero.shouldUpdate()) {
+            do Viewport.clearArea(hero.getLastCoord(), hero.getWidth(), hero.getHeight());
+            do hero.draw();
+            do hero.markClean();
+        }
+        return;
+    }
+
+    method void dispose () {
+        do Memory.deAlloc(this);
+        return;
+    }
+}
