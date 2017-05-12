@@ -1,6 +1,19 @@
+/**
+ * class encapsulating the Tank game object, used
+ * both for the game hero and enemies
+ *
+ * Tank has methods common with other game objects, especially
+ * used in the rendering cycle of the game
+ */
 class Tank {
+    // lastX and lastY are used to record the previous location
+    // of the object, which used by the renderer when redrawing objects
     field int x, y, lastX, lastY, width, height;
+    // step specifies the number of pixels advanced in a single move
     field int direction, step;
+    // dirty is used to track whether the relevant state of the object
+    // has changed, useful for the renderer to know whether or not
+    // to redraw
     field boolean dirty;
 
     constructor Tank new () {
@@ -14,58 +27,112 @@ class Tank {
         return this;
     }
 
+    /**
+     * gets tank's width
+     */
     method int getWidth () {
         return width;
     }
 
+    /**
+     * gets tank's height
+     */
     method int getHeight () {
         return height;
     }
 
+    /**
+     * gets the current x coordinate
+     */
     method int getX () {
         return x;
     }
 
+    /**
+     * gets the current y coordinate
+     */
     method int getY () {
         return y;
     }
 
+    /**
+     * gets the x coordinate in the previous frame
+     */
     method int getLastX () {
         return lastX;
     }
 
+    /**
+     * gets the y coordinate in the previous frame
+     */
     method int getLastY() {
         return lastY;
     }
 
+    /**
+     * set the new coordinates
+     * @param Ax new x coordinate
+     * @param Ay new y coordinate
+     */
     method void setCoord (int Ax, int Ay) {
+        // save old coordinates
         let lastX = x;
         let lastY = y;
+        // update coordinates
         let x = Ax;
         let y = Ay;
+        // mark object as dirty to signal redraw
         let dirty = true;
         return;
     }
 
+    /**
+     * updates the x coordinate
+     * @param Ax new x coordinate
+     */
     method void setX(int Ax) {
         do setCoord(Ax, y);
         return;
     }
 
+    /**
+     * updates the y coordinate
+     * @param Ay new y coordinate
+     */
     method void setY(int Ay) {
         do setCoord(x, Ay);
         return;
     }
 
+    /**
+     * checks whether the object should be updated
+     * this should be called before the object is redrawn
+     * the object should only be redrawn if the method returns
+     * true otherwise it should be assume that the state relevant
+     * for rendering did not change
+     */
     method boolean shouldUpdate () {
         return dirty;
     }
 
+    /**
+     * marks the object as clean
+     * this should be called after the object has been drawn
+     * to prevent a redraw of the object from taking place until
+     * the object becomes dirty again (e.g. as a result of state
+     * change)
+     */
     method void markClean () {
         let dirty = false;
         return;
     }
 
+    /**
+     * moves the tank in the specified direction, if d corresponds
+     * to the current direction, then the tank moves one step forward
+     * otherwise it turns to face d
+     * @param d direction: 1-> up, 2-> down, 3-> left, 4-> right
+     */
     method void move (int d) {
         if (direction = d) {
             do moveForward();
@@ -76,6 +143,10 @@ class Tank {
         return;
     }
 
+    /**
+     * moves the tank one step forward in the current
+     * direction
+     */
     method void moveForward () {
         if (direction = 1) { 
             do setY(getY() - step);
@@ -92,31 +163,52 @@ class Tank {
         return;
     }
 
+    /**
+     * turns the tank to the specified direction
+     * @param d direction: 1-> up, 2-> down, 3-> left, 4-> right
+     */
     method void turn (int d) {
         let direction = d;
         return;
     }
 
+    /**
+     * turns the tank to point up
+     */
     method void turnUp () {
         do turn(1);
         return;
     }
 
+    /**
+     * turns the tank to point down
+     */
     method void turnDown () {
         do turn(2);
         return;
     }
 
+    /**
+     * turns the tank to point left
+     */
     method void turnLeft () {
         do turn(3);
         return;
     }
 
+    /**
+     * turns the tank to point right
+     */
     method void turnRight () {
         do turn(4);
         return;
     }
 
+    /**
+     * shoots a Bullet from the tank's gun in the
+     * same direction as the tank
+     * @return the bullet created
+     */
     method Bullet shoot () {
         var Bullet b;
         var int bx, by;
@@ -136,6 +228,9 @@ class Tank {
         return b;
     }
 
+    /**
+     * draws the object based on its current state
+     */
     method void draw() {
         if (direction = 1) { do drawUp(); }
         if (direction = 2) { do drawDown();}
@@ -144,6 +239,9 @@ class Tank {
         return;
     }
 
+    /**
+     * draws the tank facing up
+     */
     method void drawUp () {
         // left track
         do Viewport.fillArea(x, y + 1, 4, 15);
@@ -158,6 +256,9 @@ class Tank {
         return;
     }
 
+    /**
+     * draws the tank facing down
+     */
     method void drawDown () {
         do Viewport.fillArea(x, y, 4, 15);
         do Viewport.fillArea(x + 4, y + 2, 3, 11);
@@ -167,6 +268,9 @@ class Tank {
         return;
     }
 
+    /**
+     * draws the tank facing left
+     */
     method void drawLeft () {
         do Viewport.fillArea(x + 1, y, 15, 4);
         do Viewport.fillArea(x + 3, y + 4, 11, 3);
@@ -176,6 +280,9 @@ class Tank {
         return;
     }
 
+    /**
+     * draws the tank facing right
+     */
     method void drawRight () {
         do Viewport.fillArea(x, y, 15, 4);
         do Viewport.fillArea(x + 2, y + 4, 11, 3);
@@ -185,11 +292,18 @@ class Tank {
         return;
     }
 
+    /**
+     * clears the area occupied by the object,
+     * used when updating/redrawing the object
+     */
     method void clear() {
         do Viewport.clearArea(x, y, width, height);
         return;
     }
 
+    /**
+     * dispose of the object's memory
+     */
     method void dispose () {
         do Memory.deAlloc(this);
         return;

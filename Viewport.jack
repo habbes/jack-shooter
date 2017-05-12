@@ -4,26 +4,44 @@
  */
 class Viewport {
 
+    /**
+     * boolean corresponding to color white
+     */
     function boolean white () {
         return false;
     }
 
+    /**
+     * boolean corresponding to color black
+     */
     function boolean black () {
         return true;
     }
 
+    /**
+     * gets the width of the viewport
+     */
     function int getWidth () {
         return 512;
     }
 
+    /**
+     * gets the height of the viewport
+     */
     function int getHeight () {
         return 256;
     }
 
+    /**
+     * gets the maximum x coordinate of the viewport
+     */
     function int getMaxX () {
         return 511;
     }
 
+    /**
+     * returns the maximum y coordinate of the viewport
+     */
     function int getMaxY () {
         return 255;
     }
@@ -32,10 +50,16 @@ class Viewport {
         return Coord.new(Viewport.getMaxX(), Viewport.getMaxY());
     }
 
+    /**
+     * returns the x coordinate of the viewport's center
+     */
     function int getCenterX () {
         return 255;
     }
 
+    /**
+     * returns the y coordinate of the viewport's center
+     */
     function int getCenterY () {
         return 128;
     }
@@ -44,25 +68,50 @@ class Viewport {
         return Coord.new(Viewport.getCenterX(), Viewport.getCenterY());
     }
 
+    /**
+     * get the offset address of the screen memory
+     */
     function int getAddress () {
         return 16384;
     }
 
+    /**
+     * covers the entire screen with the background color
+     */
     function void clearScreen () {
         do Viewport.clearArea(0, 0, Viewport.getWidth(), Viewport.getHeight());
         return;
     }
     
+    /**
+     * fills the entire screen white
+     */
     function void fillScreen () {
         do Viewport.fillArea(0, 0, Viewport.getWidth(), Viewport.getHeight());
         return;
     }
     
+    /**
+     * fills the area delimited by the specified rectangle on 
+     * the screen with black paint
+     * @param x x-coordinate of the top-left corner of the rectangle
+     * @param y y-coordinate of the top-left cornder of the rectangle
+     * @param w width of the rectangle
+     * @param h height of the rectangle
+     */
     function void fillArea (int x, int y, int w, int h) {
         do Viewport.colorArea(Viewport.black(), x, y, w, h);
         return;
     }
 
+    /**
+     * clears the area delimited by the specified rectangle
+     * on the screen (fills with white paint)
+     * @param x x-coordinate of the top-left corner of the rectangle
+     * @param y y-coordinate of the top-right corner of the rectangle
+     * @param w width of the rectangle
+     * @param h height of the rectangle
+     */
     function void clearArea (int x, int y, int w, int h) {
         do Viewport.colorArea(Viewport.white(), x, y, w, h);
         return;
@@ -82,6 +131,13 @@ class Viewport {
         return;
     }
 
+    /**
+     * converts the specified coordinates on the screen to a memory
+     * address
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return memory address with the screen offset accounted for
+     */
     function int coordsToAddress (int x, int y) {
         var int base;
         let base = (x / 16) + (y * 32);

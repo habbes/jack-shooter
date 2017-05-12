@@ -1,6 +1,15 @@
+/**
+ * class representing a bullet shot from a tank's gun
+ *
+ * Bullet has common methods with other game objects used
+ * in the rendering cycle
+ */
 class Bullet {
+    // physical properties, used when updating and rendering
     field int x, y, lastX, lastY, width, height, direction;
+    // number of pixels to advance in a single move
     field int step;
+    // tracks state changes and whether object should be redrawn
     field boolean dirty;
 
     constructor Bullet new (int d) {
