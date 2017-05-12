@@ -149,16 +149,16 @@ class Tank {
      */
     method void moveForward () {
         if (direction = 1) { 
-            do setY(getY() - step);
+            do setY(y - step);
         }
         if (direction = 2) {
-            do setY(getY() + step);
+            do setY(y + step);
         }
         if (direction = 3) {
-            do setX(getX() - step); 
+            do setX(x - step); 
         }
         if (direction = 4) {
-            do setX(getX() + step);
+            do setX(x + step);
         }
         return;
     }

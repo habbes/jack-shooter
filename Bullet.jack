@@ -65,10 +65,10 @@ class Bullet {
     }
 
     method void move () {
-        if (direction = 1) { do setY(getY() - step); }
-        if (direction = 2) { do setY(getY() + step); }
-        if (direction = 3) { do setX(getX() - step); }
-        if (direction = 4) { do setX(getX() + step); }
+        if (direction = 1) { do setY(y - step); }
+        if (direction = 2) { do setY(y + step); }
+        if (direction = 3) { do setX(x - step); }
+        if (direction = 4) { do setX(x + step); }
         return;
     }
 
