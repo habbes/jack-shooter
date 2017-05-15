@@ -1,11 +1,12 @@
 class SceneManager {
     field Tank hero;
     field Array bullets;
-    field int bulletCount;
+    field int bulletCount, maxBullets;
 
     constructor SceneManager new () {
-        let bullets = Array.new(20);
         let bulletCount = 0;
+        let maxBullets = 20;
+        let bullets = Array.new(maxBullets);
         return this;
     }
 
@@ -19,8 +20,10 @@ class SceneManager {
     }
 
     method void addBullet (Bullet b) {
-        let bullets[bulletCount] = b;
-        let bulletCount = bulletCount + 1;
+        if( bulletCount < maxBullets) {
+            let bullets[bulletCount] = b;
+            let bulletCount = bulletCount + 1;
+        }
         return;
     }
 
