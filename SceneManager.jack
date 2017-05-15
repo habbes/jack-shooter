@@ -4,7 +4,7 @@ class SceneManager {
     field int bulletCount;
 
     constructor SceneManager new () {
-        let bullets = Array.new(10);
+        let bullets = Array.new(20);
         let bulletCount = 0;
         return this;
     }
@@ -37,7 +37,15 @@ class SceneManager {
         while (i < bulletCount) {
             let b = bullets[i];
             if (~(b = null)) {
-                do b.draw();
+                if (b.shouldUpdate()) {
+                    do Output.printString("i");
+                    do Output.printInt(i);
+                    do Output.printString(" ");
+                    do Viewport.clearArea(b.getLastX(), b.getLastY(), b.getWidth(), b.getHeight());
+                    do b.draw();
+                    do b.markClean();
+                }
+                
             }
             let i = i + 1;
         }

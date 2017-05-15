@@ -4,7 +4,7 @@ class Game {
     field Tank hero;
 
     constructor Game new () {
-        let frameInterval = 33;
+        let frameInterval = 66;
         let scene = SceneManager.new();
         let hero = Tank.new();
         return this;
@@ -30,7 +30,8 @@ class Game {
             if (key = 133) { do hero.move(2); }
             if (key = 130) { do hero.move(3); }
             if (key = 132) { do hero.move(4); }
-            if (key = 32) { 
+            if (key = 32) {
+                do Output.printString("shoot ");
                 do scene.addBullet(hero.shoot()); 
             }
             do scene.refresh();

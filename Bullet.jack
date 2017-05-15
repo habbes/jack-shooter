@@ -64,6 +64,15 @@ class Bullet {
         return height;
     }
 
+    method boolean shouldUpdate () {
+        return dirty;
+    }
+
+    method void markClean () {
+        let dirty = false;
+        return;
+    }
+
     method void move () {
         if (direction = 1) { do setY(y - step); }
         if (direction = 2) { do setY(y + step); }
