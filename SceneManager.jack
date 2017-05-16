@@ -19,12 +19,25 @@ class SceneManager {
         return;
     }
 
-    method void addBullet (Bullet b) {
+    method boolean addBullet (Bullet b) {
+        var int i;
+        var boolean added;
+        var Bullet temp;
+        let added = false;
         if( bulletCount < maxBullets) {
-            let bullets[bulletCount] = b;
-            let bulletCount = bulletCount + 1;
+            let i = 0;
+            // find empty slot in array and add bullet there
+            while ((i < maxBullets) & (~added)) {
+                let temp = bullets[i];
+                if (temp = null) {
+                    let bullets[i] = b;
+                    let added = true;
+                    let bulletCount = bulletCount + 1;
+                }
+                let i = i + 1;
+            }
         }
-        return;
+        return added;
     }
 
     method void refresh () {
