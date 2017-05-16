@@ -59,9 +59,6 @@ class SceneManager {
             let b = bullets[i];
             if (~(b = null)) {
                 if (b.shouldUpdate()) {
-                    do Output.printString("i");
-                    do Output.printInt(i);
-                    do Output.printString(" ");
                     do Viewport.clearArea(b.getLastX(), b.getLastY(), b.getWidth(), b.getHeight());
                     do b.draw();
                     do b.markClean();
