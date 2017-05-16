@@ -19,7 +19,7 @@ class SceneManager {
         return;
     }
 
-    method boolean addBullet (Bullet b) {
+    method void addBullet (Bullet b) {
         var int i;
         var boolean added;
         var Bullet temp;
@@ -37,7 +37,11 @@ class SceneManager {
                 let i = i + 1;
             }
         }
-        return added;
+
+        if (~added) {
+            // dispose of bullet since it won't be tracked by scene
+            b.dispose();
+        }
     }
 
     method void refresh () {
