@@ -40,7 +40,7 @@ class SceneManager {
 
         if (~added) {
             // dispose of bullet since it won't be tracked by scene
-            b.dispose();
+            do b.dispose();
         }
         return;
     }
