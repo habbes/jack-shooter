@@ -42,6 +42,7 @@ class SceneManager {
             // dispose of bullet since it won't be tracked by scene
             b.dispose();
         }
+        return;
     }
 
     method void refresh () {
