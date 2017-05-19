@@ -101,6 +101,11 @@ class Bullet {
         do Viewport.fillArea(x, y, width, height);
         return;
     }
+    
+    method void onRefresh () {
+        do move();
+        return;
+    }
 
     method void dispose () {
         do Memory.deAlloc(this);

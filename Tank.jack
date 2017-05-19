@@ -302,6 +302,15 @@ class Tank {
     }
 
     /**
+     * hook called by the scene manager
+     * when the scene is refreshed, before
+     * the object is redrawn
+     */
+    method void onRefresh () {
+        return;
+    }
+
+    /**
      * dispose of the object's memory
      */
     method void dispose () {
