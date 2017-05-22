@@ -63,7 +63,9 @@ class SceneManager {
                 if (b.shouldUpdate()) {
                     if (isOutOfBounds(b)) {
                         do b.dispose();
+                        // recycle bullet space to create room for more bullets on the scene
                         let bullets[i] = null;
+                        let bulletCount = bulletCount - 1;
                     }
                     else {
                         do Viewport.clearArea(b.getLastX(), b.getLastY(), b.getWidth(), b.getHeight());
