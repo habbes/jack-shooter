@@ -61,15 +61,25 @@ class SceneManager {
             if (~(b = null)) {
                 do b.onRefresh();
                 if (b.shouldUpdate()) {
-                    do Viewport.clearArea(b.getLastX(), b.getLastY(), b.getWidth(), b.getHeight());
-                    do b.draw();
-                    do b.markClean();
+                    if (isOutOfBounds(b)) {
+                        do b.dispose();
+                        let bullets[i] = null;
+                    }
+                    else {
+                        do Viewport.clearArea(b.getLastX(), b.getLastY(), b.getWidth(), b.getHeight());
+                        do b.draw();
+                        do b.markClean();
+                    }
                 }
                 
             }
             let i = i + 1;
         }
         return;
+    }
+
+    method boolean isOutOfBounds(Bullet b) {
+        return Viewport.isAreaOutOfBounds(b.getX(), b.getY(), b.getWidth(), b.getHeight());
     }
 
     method void dispose () {

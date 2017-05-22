@@ -46,6 +46,22 @@ class Viewport {
         return 255;
     }
 
+    /**
+     * checks whether the area defined by the specified coordinates
+     * is outside the bounds of the viewport
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
+    function boolean isAreaOutOfBounds (int x, int y, int w, int h) {
+        if (x < 0) { return true; }
+        if (y < 0) { return true; }
+        if ((x + w) > 511) { return true; }
+        if ((y + h) > 255) { return true; }
+        return false;
+    }
+
     function Coord getMax () {
         return Coord.new(Viewport.getMaxX(), Viewport.getMaxY());
     }
