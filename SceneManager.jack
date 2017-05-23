@@ -48,6 +48,7 @@ class SceneManager {
     method void refresh () {
         var int i;
         var Bullet b;
+        var SceneObject so;
         do hero.onRefresh();
         if (hero.shouldUpdate()) {
             do Viewport.clearArea(hero.getLastX(), hero.getLastY(), hero.getWidth(), hero.getHeight());
@@ -60,17 +61,18 @@ class SceneManager {
             let b = bullets[i];
             if (~(b = null)) {
                 do b.onRefresh();
-                if (b.shouldUpdate()) {
-                    do Viewport.clearArea(b.getLastX(), b.getLastY(), b.getWidth(), b.getHeight());
-                    if (isOutOfBounds(b)) {
-                        do b.dispose();
+                let so = b.getSceneObject();
+                if (so.shouldUpdate()) {
+                    do Viewport.clearArea(so.getLastX(), so.getLastY(), so.getWidth(), so.getHeight());
+                    if (isOutOfBounds(so)) {
+                        do so.dispose();
                         // recycle bullet space to create room for more bullets on the scene
                         let bullets[i] = null;
                         let bulletCount = bulletCount - 1;
                     }
                     else {
                         do b.draw();
-                        do b.markClean();
+                        do so.markClean();
                     }
                 }
                 
@@ -80,8 +82,8 @@ class SceneManager {
         return;
     }
 
-    method boolean isOutOfBounds(Bullet b) {
-        return Viewport.isAreaOutOfBounds(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+    method boolean isOutOfBounds(SceneObject o) {
+        return Viewport.isAreaOutOfBounds(o.getX(), o.getY(), o.getWidth(), o.getHeight());
     }
 
     method void dispose () {

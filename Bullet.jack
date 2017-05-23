@@ -5,100 +5,40 @@
  * in the rendering cycle
  */
 class Bullet {
-    // physical properties, used when updating and rendering
-    field int x, y, lastX, lastY, width, height, direction;
-    // number of pixels to advance in a single move
-    field int step;
-    // tracks state changes and whether object should be redrawn
-    field boolean dirty;
+    field SceneObject so;
 
     constructor Bullet new (int d) {
-        let step = 4;
-        let dirty = false;
-        let x = 0;
-        let y = 0;
-        do turn(d);
-        return this;
-    }
-
-    method int getX () {
-        return x;
-    }
-
-    method int getY () {
-        return y;
-    }
-
-    method int getLastX () {
-        return lastX;
-    }
-
-    method int getLastY () {
-        return lastY;
-    }
-
-    method void setCoord(int Ax, int Ay) {
-        let lastX = x;
-        let lastY = y;
-        let x = Ax;
-        let y = Ay;
-        let dirty = true;
-        return;
-    }
-
-    method void setX (int Ax) {
-        do setCoord(Ax, y);
-        return;
-    }
-
-    method void setY (int Ay) {
-        do setCoord(x, Ay);
-        return;
-    }
-
-    method int getWidth () {
-        return width;
-    }
-
-    method int getHeight () {
-        return height;
-    }
-
-    method boolean shouldUpdate () {
-        return dirty;
-    }
-
-    method void markClean () {
-        let dirty = false;
-        return;
-    }
-
-    method void move () {
-        if (direction = 1) { do setY(y - step); }
-        if (direction = 2) { do setY(y + step); }
-        if (direction = 3) { do setX(x - step); }
-        if (direction = 4) { do setX(x + step); }
-        return;
-    }
-
-    method void turn(int d) {
-        let direction = d;
+        var int w, h;
         if (d < 3) {
             // vertical
-            let width = 2;
-            let height = 6;
+            let w = 2;
+            let h = 6;
         }
         else {
             // horizontal
-            let width = 6;
-            let height = 2;
+            let w = 6;
+            let h = 2;
         }
+        let so = SceneObject.new(0, 0, w, h, d, 4);
+        return this;
+    }
+
+    method SceneObject getSceneObject () {
+        return so;
+    }
+
+    method void move () {
+        var int d;
+        let d = so.getDirection();
+        if (d = 1) { do so.setY(so.getY() - so.getStep()); }
+        if (d = 2) { do so.setY(so.getY() + so.getStep()); }
+        if (d = 3) { do so.setX(so.getX() - so.getStep()); }
+        if (d = 4) { do so.setX(so.getX() + so.getStep()); }
         return;
     }
 
-
     method void draw () {
-        do Viewport.fillArea(x, y, width, height);
+        do Viewport.fillArea(so.getX(), so.getY(), so.getWidth(), so.getHeight());
         return;
     }
     
@@ -108,6 +48,7 @@ class Bullet {
     }
 
     method void dispose () {
+        do so.dispose();
         do Memory.deAlloc(this);
         return;
     }

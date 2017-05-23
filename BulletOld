@@ -1,0 +1,114 @@
+/**
+ * class representing a bullet shot from a tank's gun
+ *
+ * Bullet has common methods with other game objects used
+ * in the rendering cycle
+ */
+class Bullet {
+    // physical properties, used when updating and rendering
+    field int x, y, lastX, lastY, width, height, direction;
+    // number of pixels to advance in a single move
+    field int step;
+    // tracks state changes and whether object should be redrawn
+    field boolean dirty;
+
+    constructor Bullet new (int d) {
+        let step = 4;
+        let dirty = false;
+        let x = 0;
+        let y = 0;
+        do turn(d);
+        return this;
+    }
+
+    method int getX () {
+        return x;
+    }
+
+    method int getY () {
+        return y;
+    }
+
+    method int getLastX () {
+        return lastX;
+    }
+
+    method int getLastY () {
+        return lastY;
+    }
+
+    method void setCoord(int Ax, int Ay) {
+        let lastX = x;
+        let lastY = y;
+        let x = Ax;
+        let y = Ay;
+        let dirty = true;
+        return;
+    }
+
+    method void setX (int Ax) {
+        do setCoord(Ax, y);
+        return;
+    }
+
+    method void setY (int Ay) {
+        do setCoord(x, Ay);
+        return;
+    }
+
+    method int getWidth () {
+        return width;
+    }
+
+    method int getHeight () {
+        return height;
+    }
+
+    method boolean shouldUpdate () {
+        return dirty;
+    }
+
+    method void markClean () {
+        let dirty = false;
+        return;
+    }
+
+    method void move () {
+        if (direction = 1) { do setY(y - step); }
+        if (direction = 2) { do setY(y + step); }
+        if (direction = 3) { do setX(x - step); }
+        if (direction = 4) { do setX(x + step); }
+        return;
+    }
+
+    method void turn(int d) {
+        let direction = d;
+        if (d < 3) {
+            // vertical
+            let width = 2;
+            let height = 6;
+        }
+        else {
+            // horizontal
+            let width = 6;
+            let height = 2;
+        }
+        return;
+    }
+
+
+    method void draw () {
+        do Viewport.fillArea(x, y, width, height);
+        return;
+    }
+    
+    method void onRefresh () {
+        do move();
+        return;
+    }
+
+    method void dispose () {
+        do Memory.deAlloc(this);
+        return;
+    }
+}

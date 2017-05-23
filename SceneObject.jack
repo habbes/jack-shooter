@@ -1,0 +1,115 @@
+class SceneObject {
+    field int x, y, lastX, lastY, width, height, lastWidth, lastHeight, direction, step;
+    field boolean dirty;
+
+    constructor SceneObject new (int ix, int iy, int w, int h, int d, int s) {
+        let x = ix;
+        let y = iy;
+        let lastX = ix;
+        let lastY = iy;
+        let width = w;
+        let height = h;
+        let direction = d;
+        let step = s;
+        let dirty = false;
+        return this;
+    }
+
+    method int getX () {
+        return x;
+    }
+
+    method int getY () {
+        return y;
+    }
+
+    method int getLastX () {
+        return lastX;
+    }
+
+    method int getLastY () {
+        return lastY;
+    }
+
+    method void setCoord (int Ax, int Ay) {
+        let lastX = x;
+        let lastY = y;
+        let x = Ax;
+        let y = Ay;
+        let dirty = true;
+        return;
+    }
+
+    method void setX (int Ax) {
+        do setCoord(Ax, y);
+        return;
+    }
+
+    method void setY (int Ay) {
+        do setCoord(x, Ay);
+        return;
+    }
+
+    method int getWidth () {
+        return width;
+    }
+
+    method int getHeight () {
+        return height;
+    }
+
+    method int getLastWidth () {
+        return lastWidth;
+    }
+
+    method int getLastHeight () {
+        return lastHeight;
+    }
+
+    method void setWidth (int w) {
+        let width = w;
+        return;
+    }
+    
+    method void setHeight (int h) {
+        let height = h;
+        return;
+    }
+
+    method int getDirection () {
+        return direction;
+    }
+
+    method void turn (int d) {
+        let direction = d;
+        return;
+    }
+
+    method int getStep () {
+        return step;
+    }
+
+    method void setStep (int s) {
+        let step = s;
+        return;
+    }
+
+    method boolean shouldUpdate () {
+        return dirty;
+    }
+
+    method void markDirty () {
+        let dirty = true;
+        return;
+    }
+
+    method void markClean () {
+        let dirty = true;
+        return;
+    }
+
+    method void dispose () {
+        do Memory.deAlloc(this);
+        return;
+    }
+}
