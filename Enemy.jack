@@ -1,0 +1,169 @@
+class Enemy {
+    field SceneObject so;
+
+    constructor Enemy new () {
+        let so = SceneObject.new(0, 0, 16, 16, 1, 16);
+        return this;
+    }
+
+    /**
+     * moves the tank in the specified direction, if d corresponds
+     * to the current direction, then the tank moves one step forward
+     * otherwise it turns to face d
+     * @param d direction: 1-> up, 2-> down, 3-> left, 4-> right
+     */
+    method void move (int d) {
+        if (so.getDirection() = d) {
+            do moveForward();
+        }
+        else {
+            do so.turn(d);
+        }
+        return;
+    }
+
+    /**
+     * moves the tank one step forward in the current
+     * direction
+     */
+    method void moveForward () {
+        var int d;
+        let d = so.getDirection();
+        if (d = 1) { 
+            do so.setY(so.getY() - so.getStep());
+        }
+        if (d = 2) {
+            do so.setY(so.getY() + so.getStep());
+        }
+        if (d = 3) {
+            do so.setX(so.getX() - so.getStep()); 
+        }
+        if (d = 4) {
+            do so.setX(so.getX() + so.getStep());
+        }
+        return;
+    }
+
+    /**
+     * shoots a Bullet from the tank's gun in the
+     * same direction as the tank
+     * @return the bullet created
+     */
+    method Bullet shoot () {
+        var Bullet b;
+        var SceneObject bso;
+        var int x, y, direction;
+        let x = so.getX();
+        let y = so.getY();
+        let direction = so.getDirection();
+        let b = Bullet.new(direction);
+        let bso = b.getSceneObject();
+        if (direction = 1) {
+            do bso.setCoord(x + 7, (y - 1) - bso.getHeight());
+        }
+        if (direction = 2) {
+            do bso.setCoord(x + 7, y + so.getHeight());
+        }
+        if (direction = 3) {
+            do bso.setCoord((x - 1) - bso.getWidth(), y + 7);
+        }
+        if (direction = 4) {
+            do bso.setCoord(x + so.getWidth(), y + 7);
+        }
+        return b;
+    }
+
+    /**
+     * draws the object based on its current state
+     */
+    method void draw() {
+        var int direction;
+        let direction = so.getDirection();
+        if (direction = 1) { do drawUp(); }
+        if (direction = 2) { do drawDown();}
+        if (direction = 3) { do drawLeft();}
+        if (direction = 4) { do drawRight();}
+        return;
+    }
+
+    /**
+     * draws the tank facing up
+     */
+    method void drawUp () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
+        // left track
+        do Viewport.fillArea(x, y + 1, 4, 15);
+        // left part of body
+        do Viewport.fillArea(x + 4, y + 3, 3, 11);
+        // gun
+        do Viewport.fillArea(x + 7, y, 2, 11);
+        // right part of body
+        do Viewport.fillArea(x + 9, y + 3, 3, 11);
+        // right track
+        do Viewport.fillArea(x + 12, y + 1, 4, 15);
+        return;
+    }
+
+    /**
+     * draws the tank facing down
+     */
+    method void drawDown () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
+        do Viewport.fillArea(x, y, 4, 15);
+        do Viewport.fillArea(x + 4, y + 2, 3, 11);
+        do Viewport.fillArea(x + 7, y + 5, 2, 11);
+        do Viewport.fillArea(x + 9, y + 2, 3, 11);
+        do Viewport.fillArea(x + 12, y, 4, 15);
+        return;
+    }
+
+    /**
+     * draws the tank facing left
+     */
+    method void drawLeft () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
+        do Viewport.fillArea(x + 1, y, 15, 4);
+        do Viewport.fillArea(x + 3, y + 4, 11, 3);
+        do Viewport.fillArea(x, y + 7, 11, 2);
+        do Viewport.fillArea(x + 3, y + 9, 11, 3);
+        do Viewport.fillArea(x + 1, y + 12, 15, 4);
+        return;
+    }
+
+    /**
+     * draws the tank facing right
+     */
+    method void drawRight () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
+        do Viewport.fillArea(x, y, 15, 4);
+        do Viewport.fillArea(x + 2, y + 4, 11, 3);
+        do Viewport.fillArea(x + 5, y + 7, 11, 2);
+        do Viewport.fillArea(x + 2, y + 9, 11, 3);
+        do Viewport.fillArea(x, y + 12, 15, 4);
+        return;
+    }
+
+    /**
+     * hook called by the scene manager
+     * when the scene is refreshed, before
+     * the object is redrawn
+     */
+    method void onRefresh () {
+        return;
+    }
+
+    method void dispose () {
+        do so.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+}
