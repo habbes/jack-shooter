@@ -108,6 +108,17 @@ class SceneObject {
         return;
     }
 
+    method boolean checkCollision (SceneObject other) {
+        var int x2, y2, ox, oy, ox2, oy2;
+        let x2 = x + width;
+        let y2 = y + height;
+        let ox = other.getX();
+        let oy = other.getY();
+        let ox2 = ox + other.getWidth();
+        let oy2 = oy + other.getHeight();
+        return (x < ox2) & (x2 > ox) & (y < oy2) & (y2 > oy);        
+    }
+
     method void dispose () {
         do Memory.deAlloc(this);
         return;
