@@ -97,7 +97,7 @@ class SceneManager {
                 if (so.shouldUpdate()) {
                     do clearObjectArea(so);
                     if (isOutOfBounds(so)) {
-                        do so.dispose();
+                        do b.dispose();
                         // recycle bullet space to create room for more bullets on the scene
                         let bullets[i] = null;
                         let bulletCount = bulletCount - 1;
