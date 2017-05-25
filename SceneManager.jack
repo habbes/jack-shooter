@@ -77,7 +77,7 @@ class SceneManager {
 
         
         let i = 0;
-        while (i < bulletCount) {
+        while (i < maxBullets) {
             let b = bullets[i];
             if (~(b = null)) {
                 do b.onRefresh(this);
