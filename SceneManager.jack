@@ -59,14 +59,14 @@ class SceneManager {
         var Bullet b;
         var SceneObject so;
         var SceneObject eso;
-        do hero.onRefresh();
+        do hero.onRefresh(this);
         if (hero.shouldUpdate()) {
             do Viewport.clearArea(hero.getLastX(), hero.getLastY(), hero.getWidth(), hero.getHeight());
             do hero.draw();
             do hero.markClean();
         }
 
-        do enemy.onRefresh();
+        do enemy.onRefresh(this);
         let eso = enemy.getSceneObject();
         if (eso.shouldUpdate()) {
             do clearObjectArea(eso);
@@ -80,7 +80,7 @@ class SceneManager {
         while (i < bulletCount) {
             let b = bullets[i];
             if (~(b = null)) {
-                do b.onRefresh();
+                do b.onRefresh(this);
                 let so = b.getSceneObject();
                 if (so.shouldUpdate()) {
                     do clearObjectArea(so);

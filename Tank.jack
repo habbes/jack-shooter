@@ -307,8 +307,9 @@ class Tank {
      * hook called by the scene manager
      * when the scene is refreshed, before
      * the object is redrawn
+     * @param scene
      */
-    method void onRefresh () {
+    method void onRefresh (SceneManager scene) {
         return;
     }
 

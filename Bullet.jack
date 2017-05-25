@@ -42,7 +42,7 @@ class Bullet {
         return;
     }
     
-    method void onRefresh () {
+    method void onRefresh (SceneManager scene) {
         do move();
         return;
     }
