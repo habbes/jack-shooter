@@ -2,6 +2,7 @@ class SceneManager {
     field Tank hero;
     field Array bullets;
     field int bulletCount, maxBullets;
+    field Enemy enemy;
 
     constructor SceneManager new () {
         let bulletCount = 0;
@@ -45,16 +46,35 @@ class SceneManager {
         return;
     }
 
+    method void spawnEnemy () {
+        var SceneObject so;
+        let enemy = Enemy.new();
+        let so = enemy.getSceneObject();
+        do so.setCoord(50, 50); //random, change later
+        return;
+    }
+
     method void refresh () {
         var int i;
         var Bullet b;
         var SceneObject so;
+        var SceneObject eso;
         do hero.onRefresh();
         if (hero.shouldUpdate()) {
             do Viewport.clearArea(hero.getLastX(), hero.getLastY(), hero.getWidth(), hero.getHeight());
             do hero.draw();
             do hero.markClean();
         }
+
+        do enemy.onRefresh();
+        let eso = enemy.getSceneObject();
+        if (eso.shouldUpdate()) {
+            do clearObjectArea(eso);
+            do enemy.draw();
+            do eso.markClean();
+        }
+
+
         
         let i = 0;
         while (i < bulletCount) {
@@ -63,7 +83,7 @@ class SceneManager {
                 do b.onRefresh();
                 let so = b.getSceneObject();
                 if (so.shouldUpdate()) {
-                    do Viewport.clearArea(so.getLastX(), so.getLastY(), so.getWidth(), so.getHeight());
+                    do clearObjectArea(so);
                     if (isOutOfBounds(so)) {
                         do so.dispose();
                         // recycle bullet space to create room for more bullets on the scene
@@ -82,11 +102,37 @@ class SceneManager {
         return;
     }
 
+    method void clearObjectArea (SceneObject so) {
+        do Viewport.clearArea(so.getLastX(), so.getLastY(), so.getWidth(), so.getHeight());
+        return;
+    }
+
     method boolean isOutOfBounds(SceneObject o) {
         return Viewport.isAreaOutOfBounds(o.getX(), o.getY(), o.getWidth(), o.getHeight());
     }
 
     method void dispose () {
+        var int i;
+        var Bullet b;
+
+        // dispose of hero
+        do hero.dispose();
+
+        // dispose of enemy
+        do enemy.dispose();
+
+        // dipose of bullets
+        let i = 0;
+        while (i < maxBullets) {
+            let b = bullets[i];
+            if (~(b = null)) {
+                do b.dispose();
+            }
+            let i = i + 1;
+        }
+        do bullets.dispose();
+
+
         do Memory.deAlloc(this);
         return;
     }

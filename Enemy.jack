@@ -6,6 +6,10 @@ class Enemy {
         return this;
     }
 
+    method SceneObject getSceneObject () {
+        return so;
+    }
+
     /**
      * moves the tank in the specified direction, if d corresponds
      * to the current direction, then the tank moves one step forward

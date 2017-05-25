@@ -18,11 +18,13 @@ class Game {
     method void run () {
         var boolean exit;
         var char key;
+        var Enemy enemy;
         let exit = false;
         
         do scene.setHero(hero);
         do hero.setCoord(Viewport.getCenterX(), Viewport.getCenterY());
         do hero.draw();
+        do scene.spawnEnemy();
         do wait();
         while (~exit) {
             let key = Keyboard.keyPressed();
