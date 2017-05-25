@@ -2,12 +2,16 @@ class SceneManager {
     field Tank hero;
     field Array bullets;
     field int bulletCount, maxBullets;
-    field Enemy enemy;
+    field Array enemies;
+    field int enemyCount, maxEnemies;
 
     constructor SceneManager new () {
         let bulletCount = 0;
         let maxBullets = 20;
         let bullets = Array.new(maxBullets);
+        let enemyCount = 0;
+        let maxEnemies = 20;
+        let enemies = Array.new(maxEnemies);
         return this;
     }
 
@@ -47,10 +51,26 @@ class SceneManager {
     }
 
     method void spawnEnemy () {
-        var SceneObject so;
-        let enemy = Enemy.new();
-        let so = enemy.getSceneObject();
-        do so.setCoord(50, 50); //random, change later
+        var int i;
+        var Enemy temp, e;
+        var boolean added;
+        let added = false;
+        // only add enemy if there's room
+        if (enemyCount < maxEnemies) {
+            let i = 0;
+            // find first available slot
+            while ((i < maxBullets) & (~added)) {
+                let temp = enemies[i];
+                if (temp = null) {
+                    let e = Enemy.new(50, 50);
+                    do e.draw(); // force first draw since objects are created clean
+                    let enemies[i] = e;
+                    let enemyCount = enemyCount + 1;
+                    let added = true;
+                }
+                let i = i + 1;
+            }
+        }
         return;
     }
 
@@ -66,15 +86,7 @@ class SceneManager {
             do hero.markClean();
         }
 
-        do enemy.onRefresh(this);
-        let eso = enemy.getSceneObject();
-        if (eso.shouldUpdate()) {
-            do clearObjectArea(eso);
-            do enemy.draw();
-            do eso.markClean();
-        }
-
-
+        do refreshEnemies();
         
         let i = 0;
         while (i < maxBullets) {
@@ -96,6 +108,27 @@ class SceneManager {
                     }
                 }
                 
+            }
+            let i = i + 1;
+        }
+        return;
+    }
+
+    method void refreshEnemies () {
+        var int i;
+        var Enemy e;
+        var SceneObject so;
+        let i = 0;
+        while (i < maxBullets) {
+            let e = enemies[i];
+            if (~(e = null)) {
+                do e.onRefresh(this);
+                let so = e.getSceneObject();
+                if (so.shouldUpdate()) {
+                    do clearObjectArea(so);
+                    do e.draw();
+                    do so.markClean();
+                }
             }
             let i = i + 1;
         }

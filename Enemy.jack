@@ -1,8 +1,8 @@
 class Enemy {
     field SceneObject so;
 
-    constructor Enemy new () {
-        let so = SceneObject.new(0, 0, 16, 16, 1, 16);
+    constructor Enemy new (int x, int y) {
+        let so = SceneObject.new(x, y, 16, 16, 1, 16);
         return this;
     }
 
