@@ -185,12 +185,21 @@ class SceneManager {
     method void dispose () {
         var int i;
         var Bullet b;
+        var Enemy e;
 
         // dispose of hero
         do hero.dispose();
 
-        // dispose of enemy
-        do enemy.dispose();
+        // dispose of enemies
+        let i = 0;
+        while (i < maxEnemies) {
+            let e = enemies[i];
+            if (~(e = null)) {
+                do e.dispose();
+            }
+            let i = i + 1;
+        }
+        do enemies.dispose();
 
         // dipose of bullets
         let i = 0;
