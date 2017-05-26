@@ -20,7 +20,10 @@ class SceneManager {
     }
 
     method void setHero (Tank h) {
+        var SceneObject so;
         let hero = h;
+        let so = h.getSceneObject();
+        do so.setCoord(Viewport.getCenterX(), Viewport.getCenterY());
         return;
     }
 
@@ -83,11 +86,13 @@ class SceneManager {
     }
 
     method void refreshHero () {
+        var SceneObject so;
         do hero.onRefresh(this);
-        if (hero.shouldUpdate()) {
-            do Viewport.clearArea(hero.getLastX(), hero.getLastY(), hero.getWidth(), hero.getHeight());
+        let so = hero.getSceneObject();
+        if (so.shouldUpdate()) {
+            do clearObjectArea(so);
             do hero.draw();
-            do hero.markClean();
+            do so.markClean();
         }
         return;
     }

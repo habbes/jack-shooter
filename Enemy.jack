@@ -2,7 +2,7 @@ class Enemy {
     field SceneObject so;
 
     constructor Enemy new (int x, int y) {
-        let so = SceneObject.new(x, y, 16, 16, 1, 16);
+        let so = SceneObject.new(x, y, 16, 16, 1, 2);
         return this;
     }
 

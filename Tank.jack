@@ -6,125 +6,15 @@
  * used in the rendering cycle of the game
  */
 class Tank {
-    // lastX and lastY are used to record the previous location
-    // of the object, which used by the renderer when redrawing objects
-    field int x, y, lastX, lastY, width, height;
-    // step specifies the number of pixels advanced in a single move
-    field int direction, step;
-    // dirty is used to track whether the relevant state of the object
-    // has changed, useful for the renderer to know whether or not
-    // to redraw
-    field boolean dirty;
+    field SceneObject so;
 
     constructor Tank new () {
-        let width = 16;
-        let height = 16;
-        let x = 0;
-        let y = 0;
-        let direction = 1;
-        let step = 2;
-        let dirty = false;
+        let so = SceneObject.new(0, 0, 16, 16, 1, 2);
         return this;
     }
 
-    /**
-     * gets tank's width
-     */
-    method int getWidth () {
-        return width;
-    }
-
-    /**
-     * gets tank's height
-     */
-    method int getHeight () {
-        return height;
-    }
-
-    /**
-     * gets the current x coordinate
-     */
-    method int getX () {
-        return x;
-    }
-
-    /**
-     * gets the current y coordinate
-     */
-    method int getY () {
-        return y;
-    }
-
-    /**
-     * gets the x coordinate in the previous frame
-     */
-    method int getLastX () {
-        return lastX;
-    }
-
-    /**
-     * gets the y coordinate in the previous frame
-     */
-    method int getLastY() {
-        return lastY;
-    }
-
-    /**
-     * set the new coordinates
-     * @param Ax new x coordinate
-     * @param Ay new y coordinate
-     */
-    method void setCoord (int Ax, int Ay) {
-        // save old coordinates
-        let lastX = x;
-        let lastY = y;
-        // update coordinates
-        let x = Ax;
-        let y = Ay;
-        // mark object as dirty to signal redraw
-        let dirty = true;
-        return;
-    }
-
-    /**
-     * updates the x coordinate
-     * @param Ax new x coordinate
-     */
-    method void setX(int Ax) {
-        do setCoord(Ax, y);
-        return;
-    }
-
-    /**
-     * updates the y coordinate
-     * @param Ay new y coordinate
-     */
-    method void setY(int Ay) {
-        do setCoord(x, Ay);
-        return;
-    }
-
-    /**
-     * checks whether the object should be updated
-     * this should be called before the object is redrawn
-     * the object should only be redrawn if the method returns
-     * true otherwise it should be assume that the state relevant
-     * for rendering did not change
-     */
-    method boolean shouldUpdate () {
-        return dirty;
-    }
-
-    /**
-     * marks the object as clean
-     * this should be called after the object has been drawn
-     * to prevent a redraw of the object from taking place until
-     * the object becomes dirty again (e.g. as a result of state
-     * change)
-     */
-    method void markClean () {
-        let dirty = false;
-        return;
+    method SceneObject getSceneObject () {
+        return so;
     }
 
     /**
@@ -134,11 +24,11 @@ class Tank {
      * @param d direction: 1-> up, 2-> down, 3-> left, 4-> right
      */
     method void move (int d) {
-        if (direction = d) {
+        if (so.getDirection() = d) {
             do moveForward();
         }
         else {
-            do turn(d);
+            do so.turn(d);
         }
         return;
     }
@@ -148,59 +38,20 @@ class Tank {
      * direction
      */
     method void moveForward () {
-        if (direction = 1) { 
-            do setY(y - step);
+        var int d;
+        let d = so.getDirection();
+        if (d = 1) { 
+            do so.setY(so.getY() - so.getStep());
         }
-        if (direction = 2) {
-            do setY(y + step);
+        if (d = 2) {
+            do so.setY(so.getY() + so.getStep());
         }
-        if (direction = 3) {
-            do setX(x - step); 
+        if (d = 3) {
+            do so.setX(so.getX() - so.getStep()); 
         }
-        if (direction = 4) {
-            do setX(x + step);
+        if (d = 4) {
+            do so.setX(so.getX() + so.getStep());
         }
-        return;
-    }
-
-    /**
-     * turns the tank to the specified direction
-     * @param d direction: 1-> up, 2-> down, 3-> left, 4-> right
-     */
-    method void turn (int d) {
-        let direction = d;
-        return;
-    }
-
-    /**
-     * turns the tank to point up
-     */
-    method void turnUp () {
-        do turn(1);
-        return;
-    }
-
-    /**
-     * turns the tank to point down
-     */
-    method void turnDown () {
-        do turn(2);
-        return;
-    }
-
-    /**
-     * turns the tank to point left
-     */
-    method void turnLeft () {
-        do turn(3);
-        return;
-    }
-
-    /**
-     * turns the tank to point right
-     */
-    method void turnRight () {
-        do turn(4);
         return;
     }
 
@@ -211,21 +62,24 @@ class Tank {
      */
     method Bullet shoot () {
         var Bullet b;
-        var SceneObject so;
-        var int bx, by;
+        var SceneObject bso;
+        var int x, y, direction;
+        let x = so.getX();
+        let y = so.getY();
+        let direction = so.getDirection();
         let b = Bullet.new(direction);
-        let so = b.getSceneObject();
+        let bso = b.getSceneObject();
         if (direction = 1) {
-            do so.setCoord(x + 7, (y - 1) - so.getHeight());
+            do bso.setCoord(x + 7, (y - 1) - bso.getHeight());
         }
         if (direction = 2) {
-            do so.setCoord(x + 7, y + height);
+            do bso.setCoord(x + 7, y + so.getHeight());
         }
         if (direction = 3) {
-            do so.setCoord((x - 1) - so.getWidth(), y + 7);
+            do bso.setCoord((x - 1) - bso.getWidth(), y + 7);
         }
         if (direction = 4) {
-            do so.setCoord(x + width, y + 7);
+            do bso.setCoord(x + so.getWidth(), y + 7);
         }
         return b;
     }
@@ -234,6 +88,8 @@ class Tank {
      * draws the object based on its current state
      */
     method void draw() {
+        var int direction;
+        let direction = so.getDirection();
         if (direction = 1) { do drawUp(); }
         if (direction = 2) { do drawDown();}
         if (direction = 3) { do drawLeft();}
@@ -245,6 +101,9 @@ class Tank {
      * draws the tank facing up
      */
     method void drawUp () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
         // left track
         do Viewport.fillArea(x, y + 1, 4, 15);
         // left part of body
@@ -262,6 +121,9 @@ class Tank {
      * draws the tank facing down
      */
     method void drawDown () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
         do Viewport.fillArea(x, y, 4, 15);
         do Viewport.fillArea(x + 4, y + 2, 3, 11);
         do Viewport.fillArea(x + 7, y + 5, 2, 11);
@@ -274,6 +136,9 @@ class Tank {
      * draws the tank facing left
      */
     method void drawLeft () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
         do Viewport.fillArea(x + 1, y, 15, 4);
         do Viewport.fillArea(x + 3, y + 4, 11, 3);
         do Viewport.fillArea(x, y + 7, 11, 2);
@@ -286,20 +151,14 @@ class Tank {
      * draws the tank facing right
      */
     method void drawRight () {
+        var int x, y;
+        let x = so.getX();
+        let y = so.getY();
         do Viewport.fillArea(x, y, 15, 4);
         do Viewport.fillArea(x + 2, y + 4, 11, 3);
         do Viewport.fillArea(x + 5, y + 7, 11, 2);
         do Viewport.fillArea(x + 2, y + 9, 11, 3);
         do Viewport.fillArea(x, y + 12, 15, 4);
-        return;
-    }
-
-    /**
-     * clears the area occupied by the object,
-     * used when updating/redrawing the object
-     */
-    method void clear() {
-        do Viewport.clearArea(x, y, width, height);
         return;
     }
 
@@ -317,6 +176,7 @@ class Tank {
      * dispose of the object's memory
      */
     method void dispose () {
+        do so.dispose();
         do Memory.deAlloc(this);
         return;
     }

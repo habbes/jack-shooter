@@ -22,8 +22,6 @@ class Game {
         let exit = false;
         
         do scene.setHero(hero);
-        do hero.setCoord(Viewport.getCenterX(), Viewport.getCenterY());
-        do hero.draw();
         do scene.spawnEnemy();
         do wait();
         while (~exit) {
