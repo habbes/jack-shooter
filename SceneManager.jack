@@ -228,6 +228,15 @@ class SceneManager {
         return false;
     }
 
+    method boolean collidesWithHero (SceneObject so) {
+        var SceneObject other;
+        let other = hero.getSceneObject();
+        if (so.checkCollision(other)) {
+            return true;
+        }
+        return false;
+    }
+
     method Enemy collidesWithEnemy (SceneObject cur) {
         var Enemy e;
         var SceneObject other;
@@ -265,31 +274,37 @@ class SceneManager {
         return null;
     }
 
-    method boolean isAreaFree (int x, int y, int w, int h) {
-        var SceneObject temp, so;
+    method boolean isAreaFree (int x, int y, int w, int h, int id) {
+        var SceneObject temp;
+        var boolean res;
+        let temp = SceneObject.new(x, y, w, h, 0, 0);
+        do temp.setId(id);
+        let res = isAreaFreeForObject(temp);
+        do temp.dispose();
+        return res;
+    }
+
+    method boolean isAreaFreeForObject (SceneObject so) {
+        var SceneObject other;
         var Enemy e;
         var Bullet b;
         var int i;
-        let temp = SceneObject.new(x, y, w, h, 0, 0);
 
-        let so = hero.getSceneObject();
-        if (temp.checkCollision(so)) {
+        if (collidesWithHero(so)) {
             return false;
         }
 
-        let e = collidesWithEnemy(temp);
+        let e = collidesWithEnemy(so);
         if (~(e = null)) {
             return false;
         }
 
-        let b = collidesWithBullet(temp);
+        let b = collidesWithBullet(so);
         if (~(b = null)) {
             return false;
         }
 
-        do temp.dispose();
         return true;
-
     }
 
     method void dispose () {

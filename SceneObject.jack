@@ -120,7 +120,7 @@ class SceneObject {
 
     method boolean checkCollision (SceneObject other) {
         var int x2, y2, ox, oy, ox2, oy2;
-        if (~(id = other.getId())) {
+        if (id = other.getId()) {
             return false; // don't count collision with self
         }
         let x2 = x + width;

@@ -57,7 +57,7 @@ class Tank {
         if (d = 4) {
             let newX = (so.getX() + so.getStep());
         }
-        if (scene.isAreaFree(newX, newY, 16, 16)) {
+        if (scene.isAreaFree(newX, newY, 16, 16, so.getId())) {
             do so.setCoord(newX, newY);
         }
         return;
