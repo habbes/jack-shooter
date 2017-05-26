@@ -89,7 +89,7 @@ class SceneManager {
         var SceneObject so;
         do hero.onRefresh(this);
         let so = hero.getSceneObject();
-        if (so.shouldUpdate()) {
+        if (so.shouldUpdate() & (~(checkHeroCollisions()))) {
             do clearObjectArea(so);
             do hero.draw();
             do so.markClean();
@@ -160,6 +160,26 @@ class SceneManager {
 
     method boolean isOutOfBounds(SceneObject o) {
         return Viewport.isAreaOutOfBounds(o.getX(), o.getY(), o.getWidth(), o.getHeight());
+    }
+
+    method boolean checkHeroCollisions () {
+        var Enemy e;
+        var SceneObject hso, eso;
+        var int i;
+
+        let hso = hero.getSceneObject();
+        while (i < maxEnemies) {
+            let e = enemies[i];
+            if (~(e = null)) {
+                let eso = e.getSceneObject();
+                if (hso.checkCollision(eso)) {
+                    return true;
+                }
+            }
+            let i = i + 1;
+        }
+
+        return false;
     }
 
     method boolean checkBulletHits (Bullet b) {
