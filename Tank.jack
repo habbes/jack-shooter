@@ -25,9 +25,9 @@ class Tank {
      * otherwise it turns to face d
      * @param d direction: 1-> up, 2-> down, 3-> left, 4-> right
      */
-    method void move (int d) {
+    method void move (SceneManager scene, int d) {
         if (so.getDirection() = d) {
-            do moveForward();
+            do moveForward(scene);
         }
         else {
             do so.turn(d);
@@ -38,21 +38,27 @@ class Tank {
     /**
      * moves the tank one step forward in the current
      * direction
+     * @param scene current scene, used to check for obstacles
      */
-    method void moveForward () {
-        var int d;
+    method void moveForward (SceneManager scene) {
+        var int d, newY, newX;
+        let newY = so.getY();
+        let newX = so.getX();
         let d = so.getDirection();
         if (d = 1) { 
-            do so.setY(so.getY() - so.getStep());
+            let newY = (so.getY() - so.getStep());
         }
         if (d = 2) {
-            do so.setY(so.getY() + so.getStep());
+            let newY = (so.getY() + so.getStep());
         }
         if (d = 3) {
-            do so.setX(so.getX() - so.getStep()); 
+            let newX = (so.getX() - so.getStep()); 
         }
         if (d = 4) {
-            do so.setX(so.getX() + so.getStep());
+            let newX = (so.getX() + so.getStep());
+        }
+        if (scene.isAreaFree(newX, newY, 16, 16)) {
+            do so.setCoord(newX, newY);
         }
         return;
     }
@@ -173,10 +179,10 @@ class Tank {
     method void onRefresh (SceneManager scene) {
         var int key;
         let key = scene.getCurrentKey();
-        if (key = 131) { do move(1); }
-        if (key = 133) { do move(2); }
-        if (key = 130) { do move(3); }
-        if (key = 132) { do move(4); }
+        if (key = 131) { do move(scene, 1); }
+        if (key = 133) { do move(scene, 2); }
+        if (key = 130) { do move(scene, 3); }
+        if (key = 132) { do move(scene, 4); }
         if (key = 32) {
             do scene.addBullet(shoot()); 
         }

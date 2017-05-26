@@ -98,7 +98,7 @@ class SceneManager {
         var SceneObject so;
         do hero.onRefresh(this);
         let so = hero.getSceneObject();
-        if (so.shouldUpdate() & (~(checkHeroCollisions()))) {
+        if (so.shouldUpdate()) {
             do clearObjectArea(so);
             do hero.draw();
             do so.markClean();
@@ -176,17 +176,17 @@ class SceneManager {
         var SceneObject hso, eso;
         var int i;
 
-        let hso = hero.getSceneObject();
-        while (i < maxEnemies) {
-            let e = enemies[i];
-            if (~(e = null)) {
-                let eso = e.getSceneObject();
-                if (hso.checkCollision(eso)) {
-                    return true;
-                }
-            }
-            let i = i + 1;
-        }
+        // let hso = hero.getSceneObject();
+        // while (i < maxEnemies) {
+        //     let e = enemies[i];
+        //     if (~(e = null)) {
+        //         let eso = e.getSceneObject();
+        //         if (hso.checkCollision(eso)) {
+        //             return true;
+        //         }
+        //     }
+        //     let i = i + 1;
+        // }
 
         return false;
     }
@@ -212,42 +212,67 @@ class SceneManager {
         return false;
     }
 
-    method boolean isAreaFree (int x, int y, int w, int h) {
-        var SceneObject temp, so;
+    method Enemy collidesWithEnemy (SceneObject cur) {
         var Enemy e;
+        var SceneObject other;
         var int i;
-        let temp = SceneObject.new(x, y, w, h, 0, 0);
-
-        let so = hero.getSceneObject();
-        if (temp.checkCollision(so)) {
-            return true;
-        }
 
         let i = 0;
         while (i < maxEnemies) {
             let e = enemies[i];
             if (~(e = null)) {
-                let so = e.getSceneObject();
-                if (temp.checkCollision(so)) {
-                    return true;
+                let other = e.getSceneObject();
+                if (cur.checkCollision(other)) {
+                    return e;
                 }
             }
             let i = i + 1;
         }
+        return null;
+    }
 
+    method Bullet collidesWithBullet (SceneObject o) {
+        var Bullet b;
+        var SceneObject bo;
+        var int i;
         let i = 0;
         while (i < maxBullets) {
-            let e = bullets[i];
-            if (~(e = null)) {
-                let so = e.getSceneObject();
-                if (temp.checkCollision(so)) {
-                    return true;
+            let b = bullets[i];
+            if (~(b = null)) {
+                let bo = b.getSceneObject();
+                if (o.checkCollision(bo)) {
+                    return b;
                 }
             }
             let i = i + 1;
         }
+        return null;
+    }
 
-        return false;
+    method boolean isAreaFree (int x, int y, int w, int h) {
+        var SceneObject temp, so;
+        var Enemy e;
+        var Bullet b;
+        var int i;
+        let temp = SceneObject.new(x, y, w, h, 0, 0);
+
+        let so = hero.getSceneObject();
+        if (temp.checkCollision(so)) {
+            return false;
+        }
+
+        let e = collidesWithEnemy(temp);
+        if (~(e = null)) {
+            return false;
+        }
+
+        let b = collidesWithBullet(temp);
+        if (~(b = null)) {
+            return false;
+        }
+
+        do temp.dispose();
+        return true;
 
     }
 
