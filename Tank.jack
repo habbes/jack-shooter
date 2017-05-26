@@ -17,6 +17,8 @@ class Tank {
         return so;
     }
 
+    
+
     /**
      * moves the tank in the specified direction, if d corresponds
      * to the current direction, then the tank moves one step forward
@@ -169,6 +171,15 @@ class Tank {
      * @param scene
      */
     method void onRefresh (SceneManager scene) {
+        var int key;
+        let key = scene.getCurrentKey();
+        if (key = 131) { do move(1); }
+        if (key = 133) { do move(2); }
+        if (key = 130) { do move(3); }
+        if (key = 132) { do move(4); }
+        if (key = 32) {
+            do scene.addBullet(shoot()); 
+        }
         return;
     }
 

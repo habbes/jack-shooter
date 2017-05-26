@@ -25,14 +25,7 @@ class Game {
         do scene.spawnEnemy();
         do wait();
         while (~exit) {
-            let key = Keyboard.keyPressed();
-            if (key = 131) { do hero.move(1); }
-            if (key = 133) { do hero.move(2); }
-            if (key = 130) { do hero.move(3); }
-            if (key = 132) { do hero.move(4); }
-            if (key = 32) {
-                do scene.addBullet(hero.shoot()); 
-            }
+            do scene.keyPressed(Keyboard.keyPressed());
             do scene.refresh();
             do wait();
         }

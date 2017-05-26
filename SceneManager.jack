@@ -4,6 +4,7 @@ class SceneManager {
     field int bulletCount, maxBullets;
     field Array enemies;
     field int enemyCount, maxEnemies;
+    field int currentKey;
 
     constructor SceneManager new () {
         let bulletCount = 0;
@@ -15,6 +16,9 @@ class SceneManager {
         return this;
     }
 
+    method int getCurrentKey () {
+        return currentKey;
+    }
     method Tank getHero () {
         return hero;
     }
@@ -74,6 +78,11 @@ class SceneManager {
                 let i = i + 1;
             }
         }
+        return;
+    }
+
+    method void keyPressed(int key) {
+        let currentKey = key;
         return;
     }
 
