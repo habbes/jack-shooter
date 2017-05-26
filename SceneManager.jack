@@ -5,6 +5,7 @@ class SceneManager {
     field Array enemies;
     field int enemyCount, maxEnemies;
     field int currentKey;
+    field int nextObjectId;
 
     constructor SceneManager new () {
         let bulletCount = 0;
@@ -13,7 +14,15 @@ class SceneManager {
         let enemyCount = 0;
         let maxEnemies = 20;
         let enemies = Array.new(maxEnemies);
+        let nextObjectId = 1;
         return this;
+    }
+
+    method int generateId () {
+        var int temp;
+        let temp = nextObjectId;
+        let nextObjectId = nextObjectId + 1;
+        return temp;
     }
 
     method int getCurrentKey () {
@@ -27,6 +36,7 @@ class SceneManager {
         var SceneObject so;
         let hero = h;
         let so = h.getSceneObject();
+        do so.setId(generateId());
         do so.setCoord(Viewport.getCenterX(), Viewport.getCenterY());
         return;
     }
@@ -35,6 +45,7 @@ class SceneManager {
         var int i;
         var boolean added;
         var Bullet temp;
+        var SceneObject so;
         let added = false;
         if( bulletCount < maxBullets) {
             let i = 0;
@@ -43,6 +54,8 @@ class SceneManager {
                 let temp = bullets[i];
                 if (temp = null) {
                     let bullets[i] = b;
+                    let so = b.getSceneObject();
+                    do so.setId(generateId());
                     let added = true;
                     let bulletCount = bulletCount + 1;
                 }
@@ -60,16 +73,19 @@ class SceneManager {
     method void spawnEnemy () {
         var int i;
         var Enemy temp, e;
+        var SceneObject so;
         var boolean added;
         let added = false;
         // only add enemy if there's room
         if (enemyCount < maxEnemies) {
             let i = 0;
             // find first available slot
-            while ((i < maxBullets) & (~added)) {
+            while ((i < maxEnemies) & (~added)) {
                 let temp = enemies[i];
                 if (temp = null) {
                     let e = Enemy.new(50, 50);
+                    let so = e.getSceneObject();
+                    do so.setId(generateId());
                     do e.draw(); // force first draw since objects are created clean
                     let enemies[i] = e;
                     let enemyCount = enemyCount + 1;
