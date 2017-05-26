@@ -287,7 +287,6 @@ class SceneManager {
     method boolean isAreaFreeForObject (SceneObject so) {
         var SceneObject other;
         var Enemy e;
-        var Bullet b;
         var int i;
 
         if (collidesWithHero(so)) {
@@ -296,11 +295,6 @@ class SceneManager {
 
         let e = collidesWithEnemy(so);
         if (~(e = null)) {
-            return false;
-        }
-
-        let b = collidesWithBullet(so);
-        if (~(b = null)) {
             return false;
         }
 
