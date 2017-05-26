@@ -116,7 +116,7 @@ class SceneObject {
         let oy = other.getY();
         let ox2 = ox + other.getWidth();
         let oy2 = oy + other.getHeight();
-        return (x < ox2) & (x2 > ox) & (y < oy2) & (y2 > oy);        
+        return (x < ox2) & (x2 > ox) & (y < oy2) & (y2 > oy);    
     }
 
     method void dispose () {

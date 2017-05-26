@@ -188,6 +188,7 @@ class SceneManager {
         var int i;
         let bso = b.getSceneObject();
 
+        let i = 0;
         while (i < maxEnemies) {
             let e = enemies[i];
             if (~(e = null)) {
@@ -200,6 +201,45 @@ class SceneManager {
             let i = i + 1;
         }
         return false;
+    }
+
+    method boolean isAreaFree (int x, int y, int w, int h) {
+        var SceneObject temp, so;
+        var Enemy e;
+        var int i;
+        let temp = SceneObject.new(x, y, w, h, 0, 0);
+
+        let so = hero.getSceneObject();
+        if (temp.checkCollision(so)) {
+            return true;
+        }
+
+        let i = 0;
+        while (i < maxEnemies) {
+            let e = enemies[i];
+            if (~(e = null)) {
+                let so = e.getSceneObject();
+                if (temp.checkCollision(so)) {
+                    return true;
+                }
+            }
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < maxBullets) {
+            let e = bullets[i];
+            if (~(e = null)) {
+                let so = e.getSceneObject();
+                if (temp.checkCollision(so)) {
+                    return true;
+                }
+            }
+            let i = i + 1;
+        }
+
+        return false;
+
     }
 
     method void dispose () {
