@@ -130,7 +130,7 @@ class SceneManager {
                 let so = b.getSceneObject();
                 if (so.shouldUpdate()) {
                     do clearObjectArea(so);
-                    if (isOutOfBounds(so)) {
+                    if (isOutOfBounds(so) | checkBulletHits(b)) {
                         do b.dispose();
                         // recycle bullet space to create room for more bullets on the scene
                         let bullets[i] = null;
@@ -155,6 +155,28 @@ class SceneManager {
 
     method boolean isOutOfBounds(SceneObject o) {
         return Viewport.isAreaOutOfBounds(o.getX(), o.getY(), o.getWidth(), o.getHeight());
+    }
+
+    method boolean checkBulletHits (Bullet b) {
+        var SceneObject bso, eso;
+        var Enemy e;
+        var int i;
+        let bso = b.getSceneObject();
+
+        while (i < maxEnemies) {
+            let e = enemies[i];
+            if (~(e = null)) {
+                let eso = e.getSceneObject();
+                if (bso.checkCollision(eso)) {
+                    do clearObjectArea(eso);
+                    do e.dispose();
+                    let enemies[i] = null;
+                    return true;
+                }
+            }
+            let i = i + 1;
+        }
+        return false;
     }
 
     method void dispose () {
