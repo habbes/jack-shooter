@@ -1,13 +1,25 @@
 class Enemy {
     field SceneObject so;
+    field boolean dead;
 
     constructor Enemy new (int x, int y) {
         let so = SceneObject.new(x, y, 16, 16, 1, 2);
+        let dead = false;
         return this;
     }
 
     method SceneObject getSceneObject () {
         return so;
+    }
+
+    method boolean isDead () {
+        return dead;
+    }
+
+    method void die () {
+        let dead = true;
+        do so.markDirty();
+        return;
     }
 
     /**
@@ -82,6 +94,9 @@ class Enemy {
      */
     method void draw() {
         var int direction;
+        if (dead) {
+            return; // don't paint if dead
+        }
         let direction = so.getDirection();
         if (direction = 1) { do drawUp(); }
         if (direction = 2) { do drawDown();}
@@ -162,6 +177,7 @@ class Enemy {
      * @param scene
      */
     method void onRefresh (SceneManager scene) {
+        if (dead) { return; }
         do scene.addBullet(shoot());
         return;
     }

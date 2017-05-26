@@ -105,12 +105,17 @@ class SceneManager {
         while (i < maxBullets) {
             let e = enemies[i];
             if (~(e = null)) {
+                
                 do e.onRefresh(this);
                 let so = e.getSceneObject();
                 if (so.shouldUpdate()) {
                     do clearObjectArea(so);
                     do e.draw();
                     do so.markClean();
+                }
+                if (e.isDead()) {
+                    do e.dispose();
+                    let enemies[i] = null;
                 }
             }
             let i = i + 1;
@@ -168,9 +173,7 @@ class SceneManager {
             if (~(e = null)) {
                 let eso = e.getSceneObject();
                 if (bso.checkCollision(eso)) {
-                    do clearObjectArea(eso);
-                    do e.dispose();
-                    let enemies[i] = null;
+                    do e.die();
                     return true;
                 }
             }
