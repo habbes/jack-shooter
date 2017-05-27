@@ -60,6 +60,19 @@ class SceneObject {
         return;
     }
 
+    /**
+     * sets lastX and lastY to match the current x and y
+     * coordinates
+     * useful when clearing the object's area if
+     * it hasn't moved
+     */
+    method void setLastCoordToCurrent () {
+        let lastX = x;
+        let lastY = y;
+        let dirty = true;
+        return;
+    }
+
     method int getWidth () {
         return width;
     }
