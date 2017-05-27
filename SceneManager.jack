@@ -2,8 +2,8 @@ class SceneManager {
     field Tank hero;
     field Array bullets;
     field int bulletCount, maxBullets;
-    field Array enemies;
-    field int enemyCount, maxEnemies;
+    field Array tanks;
+    field int maxTanks, tankCount;
     field int currentKey;
     field int nextObjectId;
 
@@ -11,9 +11,9 @@ class SceneManager {
         let bulletCount = 0;
         let maxBullets = 20;
         let bullets = Array.new(maxBullets);
-        let enemyCount = 0;
-        let maxEnemies = 20;
-        let enemies = Array.new(maxEnemies);
+        let tankCount = 0;
+        let maxTanks = 20;
+        let tanks = Array.new(maxTanks);
         let nextObjectId = 1;
         return this;
     }
@@ -32,12 +32,36 @@ class SceneManager {
         return hero;
     }
 
-    method void setHero (Tank h) {
+    method void spawnHero () {
         var SceneObject so;
-        let hero = h;
-        let so = h.getSceneObject();
-        do so.setId(generateId());
+        let hero = Tank.new(true);
+        let so = hero.getSceneObject();
         do so.setCoord(Viewport.getCenterX(), Viewport.getCenterY());
+        do addTank(hero);
+        return;
+    }
+
+    method void addTank (Tank t) {
+        var int i;
+        var boolean added;
+        var Tank temp;
+        var SceneObject so;
+        let added = false;
+        if (tankCount < maxTanks) {
+            let i = 0;
+            while ((i < maxTanks) & (~added)) {
+                let temp = tanks[i];
+                if (temp = null) {
+                    let tanks[i] = t;
+                    let so = t.getSceneObject();
+                    do so.setId(generateId());
+                    do t.draw(); // force first draw cause object is created clean
+                    let tankCount = tankCount + 1;
+                    let added = true;
+                }
+                let i = i + 1;
+            }
+        }
         return;
     }
 
@@ -71,30 +95,13 @@ class SceneManager {
     }
 
     method void spawnEnemy () {
-        var int i;
-        var Enemy temp, e;
-        var SceneObject so;
-        var boolean added;
-        let added = false;
-        // only add enemy if there's room
-        if (enemyCount < maxEnemies) {
-            let i = 0;
-            // find first available slot
-            while ((i < maxEnemies) & (~added)) {
-                let temp = enemies[i];
-                if (temp = null) {
-                    let e = Enemy.new(50, 50);
-                    let so = e.getSceneObject();
-                    do so.setId(generateId());
-                    do e.draw(); // force first draw since objects are created clean
-                    let enemies[i] = e;
-                    let enemyCount = enemyCount + 1;
-                    let added = true;
-                }
-                let i = i + 1;
-            }
-        }
-        return;
+        var Tank e;
+        var SceneObject o;
+        let e = Tank.new(false);
+        let o = e.getSceneObject();
+        do o.setCoord(50, 50);
+        do addTank(e);
+        return;        
     }
 
     method void keyPressed(int key) {
@@ -103,44 +110,29 @@ class SceneManager {
     }
 
     method void refresh () {
-        do refreshHero();
-        do refreshEnemies();
+        do refreshTanks();
         do refreshBullets();
-
         return;
     }
 
-    method void refreshHero () {
-        var SceneObject so;
-        do hero.onRefresh(this);
-        let so = hero.getSceneObject();
-        if (so.shouldUpdate()) {
-            do clearObjectArea(so);
-            do hero.draw();
-            do so.markClean();
-        }
-        return;
-    }
-
-    method void refreshEnemies () {
+    method void refreshTanks () {
         var int i;
-        var Enemy e;
+        var Tank t;
         var SceneObject so;
         let i = 0;
         while (i < maxBullets) {
-            let e = enemies[i];
-            if (~(e = null)) {
-                
-                do e.onRefresh(this);
-                let so = e.getSceneObject();
+            let t = tanks[i];
+            if (~(t = null)) {
+                do t.onRefresh(this);
+                let so = t.getSceneObject();
                 if (so.shouldUpdate()) {
-                    do clearObjectArea(so);
-                    do e.draw();
+                    do clearLastObjectArea(so);
+                    do t.draw();
                     do so.markClean();
                 }
-                if (e.isDead()) {
-                    do e.dispose();
-                    let enemies[i] = null;
+                if (t.isDead()) {
+                    do t.dispose();
+                    let tanks[i] = null;
                 }
             }
             let i = i + 1;
@@ -159,7 +151,7 @@ class SceneManager {
                 do b.onRefresh(this);
                 let so = b.getSceneObject();
                 if (so.shouldUpdate()) {
-                    do clearObjectArea(so);
+                    do clearLastObjectArea(so);
                     if (isOutOfBounds(so) | checkBulletHits(b)) {
                         do b.dispose();
                         // recycle bullet space to create room for more bullets on the scene
@@ -178,7 +170,7 @@ class SceneManager {
         return;
     }
 
-    method void clearObjectArea (SceneObject so) {
+    method void clearLastObjectArea (SceneObject so) {
         do Viewport.clearArea(so.getLastX(), so.getLastY(), so.getWidth(), so.getHeight());
         return;
     }
@@ -187,64 +179,25 @@ class SceneManager {
         return Viewport.isAreaOutOfBounds(o.getX(), o.getY(), o.getWidth(), o.getHeight());
     }
 
-    method boolean checkHeroCollisions () {
-        var Enemy e;
-        var SceneObject hso, eso;
-        var int i;
-
-        // let hso = hero.getSceneObject();
-        // while (i < maxEnemies) {
-        //     let e = enemies[i];
-        //     if (~(e = null)) {
-        //         let eso = e.getSceneObject();
-        //         if (hso.checkCollision(eso)) {
-        //             return true;
-        //         }
-        //     }
-        //     let i = i + 1;
-        // }
-
-        return false;
-    }
-
     method boolean checkBulletHits (Bullet b) {
         var SceneObject bso, eso;
-        var Enemy e;
+        var Tank e;
         var int i;
         let bso = b.getSceneObject();
 
-        let i = 0;
-        while (i < maxEnemies) {
-            let e = enemies[i];
-            if (~(e = null)) {
-                let eso = e.getSceneObject();
-                if (bso.checkCollision(eso)) {
-                    do e.die();
-                    return true;
-                }
-            }
-            let i = i + 1;
-        }
-        return false;
+        let e = collidesWithTank(bso);
+        if (e) { do e.onShot(b); }
+        return e;
     }
 
-    method boolean collidesWithHero (SceneObject so) {
-        var SceneObject other;
-        let other = hero.getSceneObject();
-        if (so.checkCollision(other)) {
-            return true;
-        }
-        return false;
-    }
-
-    method Enemy collidesWithEnemy (SceneObject cur) {
-        var Enemy e;
+    method Tank collidesWithTank (SceneObject cur) {
+        var Tank e;
         var SceneObject other;
         var int i;
 
         let i = 0;
-        while (i < maxEnemies) {
-            let e = enemies[i];
+        while (i < maxTanks) {
+            let e = tanks[i];
             if (~(e = null)) {
                 let other = e.getSceneObject();
                 if (cur.checkCollision(other)) {
@@ -286,14 +239,10 @@ class SceneManager {
 
     method boolean isAreaFreeForObject (SceneObject so) {
         var SceneObject other;
-        var Enemy e;
+        var Tank e;
         var int i;
 
-        if (collidesWithHero(so)) {
-            return false;
-        }
-
-        let e = collidesWithEnemy(so);
+        let e = collidesWithTank(so);
         if (~(e = null)) {
             return false;
         }
@@ -304,21 +253,18 @@ class SceneManager {
     method void dispose () {
         var int i;
         var Bullet b;
-        var Enemy e;
+        var Tank e;
 
-        // dispose of hero
-        do hero.dispose();
-
-        // dispose of enemies
+        // dispose of tanks
         let i = 0;
-        while (i < maxEnemies) {
-            let e = enemies[i];
+        while (i < maxTanks) {
+            let e = tanks[i];
             if (~(e = null)) {
                 do e.dispose();
             }
             let i = i + 1;
         }
-        do enemies.dispose();
+        do tanks.dispose();
 
         // dipose of bullets
         let i = 0;

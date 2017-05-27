@@ -6,9 +6,12 @@
  * used in the rendering cycle of the game
  */
 class Tank {
+    field boolean player, dead;
     field SceneObject so;
 
-    constructor Tank new () {
+    constructor Tank new (boolean p) {
+        let player = p;
+        let dead = false;
         let so = SceneObject.new(0, 0, 16, 16, 1, 2);
         return this;
     }
@@ -17,6 +20,19 @@ class Tank {
         return so;
     }
 
+    method boolean isPlayer () {
+        return player;
+    }
+
+    method boolean isDead () {
+        return dead;
+    }
+
+    method void die () {
+        let dead = true;
+        do so.markDirty();
+        return;
+    }
     
 
     /**
@@ -97,6 +113,7 @@ class Tank {
      */
     method void draw() {
         var int direction;
+        if (dead) { return; }  // don't paint if dead
         let direction = so.getDirection();
         if (direction = 1) { do drawUp(); }
         if (direction = 2) { do drawDown();}
@@ -170,6 +187,11 @@ class Tank {
         return;
     }
 
+    method void onShot (Bullet b) {
+        do die();
+        return;
+    }
+
     /**
      * hook called by the scene manager
      * when the scene is refreshed, before
@@ -177,6 +199,20 @@ class Tank {
      * @param scene
      */
     method void onRefresh (SceneManager scene) {
+        if (dead) {
+            do Output.printString("dead");
+            do Output.printInt(so.shouldUpdate());
+            return; }
+        if (player) {
+            do refreshForPlayer(scene);
+        }
+        else {
+            do refreshForAI(scene);
+        }
+        return;
+    }
+
+    method void refreshForPlayer (SceneManager scene) {
         var int key;
         let key = scene.getCurrentKey();
         if (key = 131) { do move(scene, 1); }
@@ -186,6 +222,11 @@ class Tank {
         if (key = 32) {
             do scene.addBullet(shoot()); 
         }
+        return;
+    }
+
+    method void refreshForAI (SceneManager scene) {
+        do scene.addBullet(shoot());
         return;
     }
 

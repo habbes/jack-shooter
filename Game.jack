@@ -1,12 +1,10 @@
 class Game {
     field int frameInterval;
     field SceneManager scene;
-    field Tank hero;
 
     constructor Game new () {
         let frameInterval = 66;
         let scene = SceneManager.new();
-        let hero = Tank.new();
         return this;
     }
 
@@ -18,10 +16,9 @@ class Game {
     method void run () {
         var boolean exit;
         var char key;
-        var Enemy enemy;
         let exit = false;
         
-        do scene.setHero(hero);
+        do scene.spawnHero();
         do scene.spawnEnemy();
         do wait();
         while (~exit) {
