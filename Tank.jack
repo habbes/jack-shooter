@@ -30,6 +30,7 @@ class Tank {
 
     method void die () {
         let dead = true;
+        do so.setCoord(so.getX(), so.getY()); //updates lastX and lastY to current
         do so.markDirty();
         return;
     }
