@@ -62,10 +62,6 @@ class Viewport {
         return false;
     }
 
-    function Coord getMax () {
-        return Coord.new(Viewport.getMaxX(), Viewport.getMaxY());
-    }
-
     /**
      * returns the x coordinate of the viewport's center
      */
@@ -78,10 +74,6 @@ class Viewport {
      */
     function int getCenterY () {
         return 128;
-    }
-
-    function Coord getCenter () {
-        return Coord.new(Viewport.getCenterX(), Viewport.getCenterY());
     }
 
     /**
