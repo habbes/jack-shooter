@@ -223,7 +223,19 @@ class Tank {
     }
 
     method void refreshForAI (SceneManager scene) {
-        do scene.addBullet(shoot());
+        var int choice;
+        var int d;
+        let choice = Random.randRange(1, 3);
+        if (choice = 1) {
+            do scene.addBullet(shoot());
+        }
+        if (choice = 2) {
+            do moveForward(scene);
+        }
+        if (choice = 3) {
+            let d = Random.randRange(1, 4);
+            do move(scene, d);
+        }
         return;
     }
 

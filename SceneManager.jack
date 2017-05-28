@@ -68,18 +68,19 @@ class SceneManager {
 
     method void addBullet (Bullet b) {
         var int i;
-        var boolean added;
+        var boolean added, areaFree;
         var Bullet temp;
         var SceneObject so;
+        let so = b.getSceneObject();
         let added = false;
-        if( bulletCount < maxBullets) {
+        let areaFree = ~isOutOfBounds(so);
+        if( (bulletCount < maxBullets) & areaFree) {
             let i = 0;
             // find empty slot in array and add bullet there
             while ((i < maxBullets) & (~added)) {
                 let temp = bullets[i];
                 if (temp = null) {
                     let bullets[i] = b;
-                    let so = b.getSceneObject();
                     do so.setId(generateId());
                     let added = true;
                     let bulletCount = bulletCount + 1;
@@ -265,7 +266,7 @@ class SceneManager {
         var boolean res;
         let temp = SceneObject.new(x, y, w, h, 0, 0);
         do temp.setId(id);
-        let res = isAreaFreeForObject(temp);
+        let res = isAreaFreeForObject(temp) | isOutOfBounds(temp);
         do temp.dispose();
         return res;
     }
