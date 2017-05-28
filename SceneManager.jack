@@ -6,6 +6,7 @@ class SceneManager {
     field int maxTanks, tankCount;
     field int currentKey;
     field int nextObjectId;
+    field int lastEnemySpawnedTick;
 
     constructor SceneManager new () {
         let bulletCount = 0;
@@ -94,7 +95,7 @@ class SceneManager {
         return;
     }
 
-    method void spawnEnemy () {
+    method void spawnEnemy (int tick) {
         var int x, y, d, i;
         var boolean added;
         var Tank e;
@@ -112,6 +113,7 @@ class SceneManager {
                 do o.setCoord(x, y);
                 do o.turn(d);
                 do addTank(e);
+                // let lastEnemySpawnedTick = tick;
                 let added = true;
             }
             let i = i + 1;
@@ -122,12 +124,25 @@ class SceneManager {
         return;        
     }
 
+    method boolean shouldSpawnEnemy (int tick) {
+        // TODO: this is a poor implementation, rewrite
+        var int slots, p;
+        if (tick - lastEnemySpawnedTick < 5) { return false; }
+        let slots = maxTanks - tankCount;
+        let p = Random.randRange(0, slots);
+        return (p > 2);
+    }
+
     method void keyPressed(int key) {
         let currentKey = key;
         return;
     }
 
-    method void refresh () {
+    method void refresh (int tick) {
+        // poor implementation rewrite
+        // if (shouldSpawnEnemy(tick)) {
+        //     do spawnEnemy(tick);
+        // }
         do refreshTanks();
         do refreshBullets();
         return;

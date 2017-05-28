@@ -1,5 +1,5 @@
 class Game {
-    field int frameInterval;
+    field int frameInterval, tick;
     field SceneManager scene;
 
     constructor Game new () {
@@ -17,14 +17,18 @@ class Game {
         var boolean exit;
         var char key;
         let exit = false;
+        let tick = 0;
         do Random.setSeed(100);
         do scene.spawnHero();
-        do scene.spawnEnemy();
+        do scene.spawnEnemy(tick);
+        do scene.spawnEnemy(tick);
+        do scene.spawnEnemy(tick);
         do wait();
         while (~exit) {
             do scene.keyPressed(Keyboard.keyPressed());
-            do scene.refresh();
+            do scene.refresh(tick);
             do wait();
+            let tick = tick + 1;
         }
         do hero.dispose();
         return;
