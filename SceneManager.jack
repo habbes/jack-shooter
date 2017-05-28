@@ -95,11 +95,16 @@ class SceneManager {
     }
 
     method void spawnEnemy () {
+        var int x, y, d;
         var Tank e;
         var SceneObject o;
         let e = Tank.new(false);
         let o = e.getSceneObject();
-        do o.setCoord(50, 50);
+        let x = Random.randRange(0, Viewport.getMaxX() - 16);
+        let y = Random.randRange(0, Viewport.getMaxY() - 16);
+        let d = Random.randRange(1, 4);
+        do o.setCoord(x, y);
+        do o.turn(d);
         do addTank(e);
         return;        
     }

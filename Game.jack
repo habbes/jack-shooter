@@ -17,7 +17,7 @@ class Game {
         var boolean exit;
         var char key;
         let exit = false;
-        
+        do Random.setSeed(100);
         do scene.spawnHero();
         do scene.spawnEnemy();
         do wait();
