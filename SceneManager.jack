@@ -95,17 +95,30 @@ class SceneManager {
     }
 
     method void spawnEnemy () {
-        var int x, y, d;
+        var int x, y, d, i;
+        var boolean added;
         var Tank e;
         var SceneObject o;
         let e = Tank.new(false);
         let o = e.getSceneObject();
+        let added = false;
         let x = Random.randRange(0, Viewport.getMaxX() - 16);
         let y = Random.randRange(0, Viewport.getMaxY() - 16);
-        let d = Random.randRange(1, 4);
-        do o.setCoord(x, y);
-        do o.turn(d);
-        do addTank(e);
+        let i = 0;
+        while ((i < 3) & (~added)) {
+            // try up to 3 times to find free spot
+            if (isAreaFreeForObject(o)) {
+                let d = Random.randRange(1, 4);
+                do o.setCoord(x, y);
+                do o.turn(d);
+                do addTank(e);
+                let added = true;
+            }
+            let i = i + 1;
+        }
+        if (~added) {
+            do e.dispose();
+        }
         return;        
     }
 
