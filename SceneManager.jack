@@ -266,7 +266,7 @@ class SceneManager {
         var boolean res;
         let temp = SceneObject.new(x, y, w, h, 0, 0);
         do temp.setId(id);
-        let res = isAreaFreeForObject(temp) | isOutOfBounds(temp);
+        let res = isAreaFreeForObject(temp) & (~isOutOfBounds(temp));
         do temp.dispose();
         return res;
     }
