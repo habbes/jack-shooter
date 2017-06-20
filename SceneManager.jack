@@ -353,6 +353,10 @@ class SceneManager {
         if (~(e = null)) {
             return false;
         }
+        // TODO: the following check for
+        // collision results in enemy tanks
+        // not being displayed for some reason,
+        // investigate...
         let e = collidesWithBlock(so);
         if (~(e = null)) {
             return false;
