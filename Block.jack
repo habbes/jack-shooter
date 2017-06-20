@@ -1,0 +1,33 @@
+/**
+ * this class represents a box block on the
+ * scene that serves as an obstacle to tanks
+ * it maybe destructible or indestructible,
+ * destructible blocks may contain special items
+ */
+class Block {
+
+    field SceneObject so;
+
+    constructor Block new (int w, int h) {
+        let so = SceneObject.new(0, 0, w, h, 1, 2);
+        return this;
+    }
+
+    method SceneObject getSceneObject () {
+        return so;
+    }
+
+    /**
+     * paints the block on the scene
+     */
+    method void draw () {
+        do Viewport.fillArea(so.getX(), so.getY(), so.getWidth(), so.getHeight());
+        return;
+    }
+
+    method void dispose () {
+        do so.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}
