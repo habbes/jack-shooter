@@ -4,6 +4,8 @@ class SceneManager {
     field int bulletCount, maxBullets;
     field Array tanks;
     field int maxTanks, tankCount;
+    field Array blocks;
+    field int maxBlocks, blockCount;
     field int currentKey;
     field int nextObjectId;
     field int lastEnemySpawnedTick;
@@ -15,6 +17,9 @@ class SceneManager {
         let tankCount = 0;
         let maxTanks = 20;
         let tanks = Array.new(maxTanks);
+        let blockCount = 0;
+        let maxBlocks = 10;
+        let blocks = Array.new(maxBlocks);
         let nextObjectId = 1;
         return this;
     }
@@ -134,6 +139,34 @@ class SceneManager {
         return (p > 2);
     }
 
+    method void addBlock (Block b) {
+        var int i;
+        var boolean added;
+        var Block temp;
+        var SceneObject so;
+        let so = b.getSceneObject();
+        let added = false;
+        if (blockCount < maxBlocks) {
+            let i = 0;
+            // find empty slot and add block there
+            while ((i < maxBlocks) & (~added)) {
+                let temp = blocks[i];
+                if (temp = null) {
+                    let blocks[i] = b;
+                    do so.setId(generateId());
+                    let added = true;
+                    let bulletCount = bulletCount + 1;
+                }
+                let i = i + 1;
+            }
+        }
+
+        if (~added) {
+            do b.dispose();
+        }
+        return;
+    }
+
     method void keyPressed(int key) {
         let currentKey = key;
         return;
@@ -146,6 +179,7 @@ class SceneManager {
         // }
         do refreshTanks();
         do refreshBullets();
+        do refreshBlocks();
         return;
     }
 
@@ -198,6 +232,27 @@ class SceneManager {
                     }
                 }
                 
+            }
+            let i = i + 1;
+        }
+        return;
+    }
+
+    method void refreshBlocks () {
+        var int i;
+        var Block b;
+        var SceneObject so;
+        let i = 0;
+        while (i < maxBlocks) {
+            let b = blocks[i];
+            if (~(b = null)) {
+                do b.onRefresh(this);
+                let so = b.getSceneObject();
+                if (so.shouldUpdate()) {
+                    do clearLastObjectArea(so);
+                    do b.draw();
+                    do so.markClean();
+                }
             }
             let i = i + 1;
         }
@@ -261,6 +316,24 @@ class SceneManager {
         return null;
     }
 
+    method Bullet collidesWithBlock (SceneObject o) {
+        var Block b;
+        var SceneObject bo;
+        var int i;
+        let i = 0;
+        while (i < maxBlocks) {
+            let b = blocks[i];
+            if (~(b = null)) {
+                let bo = b.getSceneObject();
+                if (o.checkCollision(bo)) {
+                    return b;
+                }
+            }
+            let i = i + 1;
+        }
+        return null;
+    }
+
     method boolean isAreaFree (int x, int y, int w, int h, int id) {
         var SceneObject temp;
         var boolean res;
@@ -277,6 +350,10 @@ class SceneManager {
         var int i;
 
         let e = collidesWithTank(so);
+        if (~(e = null)) {
+            return false;
+        }
+        let e = collidesWithBlock(so);
         if (~(e = null)) {
             return false;
         }

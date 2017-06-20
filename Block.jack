@@ -8,14 +8,20 @@ class Block {
 
     field SceneObject so;
 
-    constructor Block new (int w, int h) {
-        let so = SceneObject.new(0, 0, w, h, 1, 2);
+    constructor Block new (int x, int y) {
+        let so = SceneObject.new(0, 0, 16, 16, 1, 2);
+        // set coords separately so it can marked dirty and drawn
+        do so.setCoord(x, y);
         return this;
     }
 
     method SceneObject getSceneObject () {
         return so;
     }
+
+    method void onRefresh (SceneManager scene) {
+        return;
+    } 
 
     /**
      * paints the block on the scene

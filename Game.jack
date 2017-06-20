@@ -8,6 +8,13 @@ class Game {
         return this;
     }
 
+    method void setupScene () {
+        // TODO: this is just for testing purposes
+        do scene.addBlock(Block.new(0, 0));
+        do scene.addBlock(Block.new(10, 20));
+        return;
+    }
+
     method void wait () {
         do Sys.wait(frameInterval);
         return;
@@ -19,6 +26,7 @@ class Game {
         let exit = false;
         let tick = 0;
         do Random.setSeed(100);
+        do setupScene();
         do scene.spawnHero();
         do scene.spawnEnemy(tick);
         do scene.spawnEnemy(tick);
